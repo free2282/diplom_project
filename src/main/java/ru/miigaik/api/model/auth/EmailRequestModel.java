@@ -1,4 +1,4 @@
-package ru.miigaik.api.auth.model;
+package ru.miigaik.api.model.auth;
 
 public class EmailRequestModel
 {
