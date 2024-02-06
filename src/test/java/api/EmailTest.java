@@ -6,13 +6,17 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import ru.miigaik.api.AuthApi;
-import ru.miigaik.api.auth.model.EmailErrorResponseModel;
-import ru.miigaik.api.auth.model.EmailRequestModel;
-import ru.miigaik.api.auth.model.EmailResponseModel;
+import ru.miigaik.api.model.auth.EmailErrorResponseModel;
+import ru.miigaik.api.model.auth.EmailRequestModel;
+import ru.miigaik.api.model.auth.EmailResponseModel;
+
+import java.util.concurrent.TimeUnit;
+
 import static org.apache.http.HttpStatus.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
-import static ru.miigaik.generator.Generator.setEmailToAuthRequest;
+import static ru.miigaik.generator.Generator.setEmailToAuthRequest1Var;
+import static ru.miigaik.generator.Generator.setEmailToAuthRequest2Var;
 
 public class EmailTest
 {
@@ -22,10 +26,10 @@ public class EmailTest
     private EmailRequestModel emailRequestModel;
 
     @BeforeEach
-    public void setUp()
-    {
+    public void setUp() throws InterruptedException {
+//        TimeUnit.SECONDS.sleep(1);
         authApi = new AuthApi();
-        emailRequestModel = setEmailToAuthRequest();
+        emailRequestModel = setEmailToAuthRequest1Var();
     }
 
 

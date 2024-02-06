@@ -1,4 +1,4 @@
-package ru.miigaik.api.auth.model;
+package ru.miigaik.api.model.auth;
 
 import java.util.ArrayList;
 import java.util.List;
