@@ -27,6 +27,7 @@ public class EmailTest
 
     @BeforeEach
     public void setUp()
+
     {
 
         authApi = new AuthApi();
