@@ -5,6 +5,8 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import ru.miigaik.api.auth.AuthApi;
 import ru.miigaik.api.auth.model.EmailErrorResponseModel;
 import ru.miigaik.api.auth.model.EmailRequestModel;
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
+import static ru.miigaik.generator.Generator.setEmailToAuthRequest;
 
 public class EmailTest
 {
@@ -26,8 +29,7 @@ public class EmailTest
     public void setUp()
     {
         authApi = new AuthApi();
-        email = "qwe@ya.ru"; // добавить генерацию email
-        emailRequestModel = new EmailRequestModel(email);
+        emailRequestModel = setEmailToAuthRequest();
     }
 
 
@@ -36,45 +38,53 @@ public class EmailTest
     {
         response = authApi.authEmail(emailRequestModel);
 
-        Allure.addAttachment("Проверка запросооа по отправке кода на почту", email);
-        EmailResponseModel emailResponseModel = response.body().as(EmailResponseModel.class);
-        assertEquals(SC_OK, response.statusCode());
+        Allure.addAttachment("Проверка статус кода ответа по отправке кода на почту", emailRequestModel.getEmail());
+        assertEquals("Статус код ответа не 200",SC_OK, response.statusCode());
     }
 
     @Test
-    public void checkEmailAuthBodyTest()
+    public void checkEmailAuthTokenSizeTest()
     {
         response = authApi.authEmail(emailRequestModel);
 
-        Allure.addAttachment("Проверка запросооа по отправке кода на почту", email);
+        Allure.addAttachment("Проверка запроса по отправке кода на почту", emailRequestModel.getEmail());
         EmailResponseModel emailResponseModel = response.body().as(EmailResponseModel.class);
-        assertEquals("Код для входа был отправлен вам на email.", emailResponseModel.getDetail());
+
+
+        assertEquals("Длина токена не равна 6",6, emailResponseModel.getDetail().length());
     }
 
-    @Test
-    public void checkNegativeEmailAuthStatusCodeTest()
+    @ParameterizedTest
+    @CsvSource({
+            "testData","@ya.ru", "йцу@ya.ru"
+    })
+    public void checkValidationOfApiStringValueTest(String errorEmails)
     {
-        email = "hardcode_error_value_for_test";
-        emailRequestModel.setEmail(email);
+
+        emailRequestModel.setEmail(errorEmails);
         response = authApi.authEmail(emailRequestModel);
 
-        assertEquals(SC_BAD_REQUEST, response.statusCode()); // 400 или 429?
+        assertEquals("Статус код не 400", SC_BAD_REQUEST,response.statusCode());
     }
 
     @Test
-    public void checkNegativeEmailAuthBodyTest()
+    public void checkValidationNullValueOfEmailTest()
     {
-        email = "hardcode_error_value_for_test";
-        emailRequestModel.setEmail(email);
+
+        emailRequestModel.setEmail(null);
+        response = authApi.authEmail(emailRequestModel);
+
+        assertEquals("Статус код не 400", SC_BAD_REQUEST,response.statusCode());
+    }
+
+    @Test
+    public void checkBadRequestResponseTextTest()
+    {
+        emailRequestModel.setEmail(null);
         response = authApi.authEmail(emailRequestModel);
 
         EmailErrorResponseModel emailErrorResponseModel = response.body().as(EmailErrorResponseModel.class);
-        Allure.addAttachment("Проверка запросооа по отправке кода на почту", email);
 
-        List<String> expecting = new ArrayList<>();
-        expecting.add("Введите правильный адрес электронной почты.");
-
-        assertEquals(expecting,
-                emailErrorResponseModel.getEmail());
+        assertEquals("Тело ответа на ошибочынй запрос не совпало","Это поле не может быть пустым.", emailErrorResponseModel.getEmail());
     }
 }
