@@ -26,7 +26,7 @@ public class EmailTest
     private EmailRequestModel emailRequestModel;
 
     @BeforeEach
-    public void setUp() 
+    public void setUp()
     {
 
         authApi = new AuthApi();
