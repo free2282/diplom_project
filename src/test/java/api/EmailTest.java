@@ -26,8 +26,10 @@ public class EmailTest
     private EmailRequestModel emailRequestModel;
 
     @BeforeEach
-    public void setUp() throws InterruptedException {
-//        TimeUnit.SECONDS.sleep(1);
+    public void setUp()
+
+    {
+
         authApi = new AuthApi();
         emailRequestModel = setEmailToAuthRequest1Var();
     }
