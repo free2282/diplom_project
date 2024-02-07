@@ -10,13 +10,10 @@ import ru.miigaik.api.model.auth.EmailErrorResponseModel;
 import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
 
-import java.util.concurrent.TimeUnit;
-
 import static org.apache.http.HttpStatus.*;
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.assertEquals;
-import static ru.miigaik.generator.Generator.setEmailToAuthRequest1Var;
-import static ru.miigaik.generator.Generator.setEmailToAuthRequest2Var;
+import static ru.miigaik.action.Generator.setEmailToAuthRequest1Var;
 
 public class EmailTest
 {

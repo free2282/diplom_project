@@ -8,18 +8,14 @@ import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
 import ru.miigaik.api.model.refresh.RefreshErrorResponseModel;
 import ru.miigaik.api.model.refresh.RefreshRequestModel;
-import ru.miigaik.api.model.refresh.RefreshResponseModel;
 import ru.miigaik.api.model.token.TokenRequestModel;
 import ru.miigaik.api.model.token.TokenResponseModel;
-
-import java.util.concurrent.TimeUnit;
 
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.apache.http.HttpStatus.SC_UNAUTHORIZED;
 import static org.junit.Assert.assertEquals;
 
-import static ru.miigaik.generator.Generator.setEmailToAuthRequest1Var;
-import static ru.miigaik.generator.Generator.setEmailToAuthRequest2Var;
+import static ru.miigaik.action.Generator.setEmailToAuthRequest1Var;
 
 public class RefreshTest
 {
