@@ -12,7 +12,7 @@ import static ru.miigaik.cfg.ConfigurationProject.MAIN_URL;
 
 public class BaseApiRequest
 {
-    @Step()
+    @Step("Базовый запрос")
     protected RequestSpecification baseRequest()
     {
         Allure.addAttachment(

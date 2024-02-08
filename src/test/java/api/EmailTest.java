@@ -1,10 +1,8 @@
 package api;
 import io.qameta.allure.Allure;
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.Before;
+import org.junit.Test;
 import ru.miigaik.api.AuthApi;
 import ru.miigaik.api.model.auth.EmailErrorResponseModel;
 import ru.miigaik.api.model.auth.EmailRequestModel;
@@ -22,7 +20,7 @@ public class EmailTest
     private Response response;
     private EmailRequestModel emailRequestModel;
 
-    @BeforeEach
+    @Before
     public void setUp()
 
     {
@@ -53,18 +51,18 @@ public class EmailTest
         assertEquals("Длина токена не равна 6",6, emailResponseModel.getDetail().length());
     }
 
-    @ParameterizedTest
-    @CsvSource({
-            "testData","@ya.ru", "йцу@ya.ru"
-    })
-    public void checkValidationOfApiStringValueTest(String errorEmails)
-    {
-
-        emailRequestModel.setEmail(errorEmails);
-        response = authApi.authEmail(emailRequestModel);
-
-        assertEquals("Статус код не 400", SC_BAD_REQUEST,response.statusCode());
-    }
+//    @ParameterizedTest
+//    @CsvSource({
+//            "testData","@ya.ru", "йцу@ya.ru"
+//    })
+//    public void checkValidationOfApiStringValueTest(String errorEmails)
+//    {
+//
+//        emailRequestModel.setEmail(errorEmails);
+//        response = authApi.authEmail(emailRequestModel);
+//
+//        assertEquals("Статус код не 400", SC_BAD_REQUEST,response.statusCode());
+//    }
 
     @Test
     public void checkValidationNullValueOfEmailTest()

@@ -10,7 +10,7 @@ import static ru.miigaik.cfg.ConfigurationProject.*;
 
 public class AuthApi extends BaseApiRequest
 {
-    @Step()
+    @Step("Запрос по созданию токена авторизации")
     public Response authEmail(EmailRequestModel emailRequestModel)
     {
         Allure.addAttachment("Запрос по созданию токена авторизации, отправляющийся на ", EMAIL_API);
@@ -20,19 +20,19 @@ public class AuthApi extends BaseApiRequest
 
     }
 
-    @Step()
+    @Step("Запрос по созданию токена доступа и токена для обновления доступа")
     public Response authToken(TokenRequestModel tokenRequestModel)
     {
-        Allure.addAttachment("Запрос по созданию токена доступа и токена для обновления доступа", TOKEN_API);
+        Allure.addAttachment("Запрос по созданию токена доступа и токена для обновления доступа, отправленный на", TOKEN_API);
         return baseRequest()
                 .body(tokenRequestModel)
                 .post(TOKEN_API);
     }
 
-    @Step()
+    @Step("Запрос по обновлению токена доступа")
     public Response refreshToken(RefreshRequestModel refreshRequestModel)
     {
-        Allure.addAttachment("Запрос по обновлению токена доступа", REFRESH_TOKEN_API);
+        Allure.addAttachment("Запрос по обновлению токена доступа, отправленный на ", REFRESH_TOKEN_API);
         return baseRequest()
                 .body(refreshRequestModel)
                 .post(REFRESH_TOKEN_API);

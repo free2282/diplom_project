@@ -15,10 +15,11 @@ import org.junit.Assert;
 import javax.swing.*;
 
 import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 
-public class BasePage
+public abstract class BasePage
 {
     protected WebDriver driver;
     protected Actions actions;
@@ -31,7 +32,7 @@ public class BasePage
         actions = new Actions(driver);
     }
 
-    @Step()
+
     protected WebElement findElementOnPage(By xpath, int timeOutSeconds)
     {
         Allure.addAttachment("Поиск элемента по пути", xpath+"");
@@ -49,6 +50,12 @@ public class BasePage
 
     protected void setDataToInputElement(By xpath, String data)
     {
+        findElementOnPage(xpath).sendKeys(data);
+    }
+
+    protected void setDataToInputElement(By xpath, String data, int timeWaiting) throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(timeWaiting);
         findElementOnPage(xpath).sendKeys(data);
     }
 
@@ -111,6 +118,11 @@ public class BasePage
             return false;
         }
     }
+
+
+    public abstract BasePage waitAfterEvent(int timeWaiting) throws InterruptedException;
+
+
 //    public WebElement waitElementHaveAttributesToBe(By xpath, int timeOutSeconds, String attributes)
 //    {
 //

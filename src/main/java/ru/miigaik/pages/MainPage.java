@@ -1,7 +1,11 @@
 package ru.miigaik.pages;
 
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+
+import java.util.concurrent.TimeUnit;
 
 public class MainPage extends BasePage
 {
@@ -22,74 +26,103 @@ public class MainPage extends BasePage
         super(driver);
     }
 
+    @Step("Установка значения в поле 'Электронная почта'")
     public MainPage setEmailToField(String email)
     {
+        Allure.addAttachment("В поле для почты была положена почта с адрессом", email+"");
         setDataToInputElement(emailInputField, email);
         return this;
     }
 
+    @Step("Нажатие на кнопку 'Получить код'")
     public MainPage clickGetTokenButton()
     {
         clickElementOnPage(getTokenButton);
         return this;
     }
 
+    @Step("Установка значения в поле 'Одноразовый код'")
     public MainPage setTokenToField(String token)
     {
         setDataToInputElement(tokenInputField, token);
         return this;
     }
 
+    @Step("Клик на кнопку 'Войти'")
     public MainPage clickLogInButton()
     {
         clickElementOnPage(logInButton);
         return this;
     }
 
+    @Step("Проверка видна ли кнопка 'Выйти'")
     public boolean isExitButtonDisplayed()
     {
+        waitUntilPresenceOfElement(exitButtonOnInformationAboutYourselfPage, 10);
         return elementIsDisplayed(exitButtonOnInformationAboutYourselfPage);
     }
 
-    public boolean isLogInIsNotDisplayAfterClickBackButton()
+    @Step("Проверка исчезновения кнопки 'Войти'")
+    public boolean isLogInIsNotDisplay()
     {
         return elementIsDisplayed(logInButton);
     }
 
+    @Step("Проверка видна ли кнопка 'Получить код'")
     public boolean isGetTokenDisplayed()
     {
         return elementIsDisplayed(getTokenButton);
     }
 
+    @Step("Нажатие на кнопку 'Назад'")
     public MainPage clickBackButton()
     {
         clickElementOnPage(backButton);
         return this;
     }
 
+    @Step("Проверка видно ли уведомление об успешном вводе email")
     public boolean isSuccessfulInputEmailNotificationVisible()
     {
         return elementIsDisplayed(successfulNotificationInputEmailText);
     }
 
+    @Step("Проверка видна ли кнопка 'Войти'")
+    public boolean isLogInButtonDisplayed()
+    {
+        return elementIsDisplayed(logInButton);
+    }
+
+    @Step("Проверка видно ли уведомление об ошибочном вводе email")
     public boolean isEmailIsNotValidNotificationDisplayed()
     {
         return elementIsDisplayed(invalidEmailNotification);
     }
 
+    @Step("Проверка виден ли текст с просьбой ввести email после нажатия на кнопку 'Получить код' с пустой строкой email")
     public boolean isEmailNullNotificationDisplayed()
     {
         waitUntilPresenceOfElement(nullEmailNotification, 5);
         return elementIsDisplayed(nullEmailNotification);
     }
 
+    @Step("Проверка видно ли уведомление о том, что код для входа не той длины")
     public boolean isTokenErrorLengthDisplayed()
     {
         return elementIsDisplayed(errorLengthTokenNotification);
     }
 
+    @Step("Проверка уведомления о том, что код для входа ошибочен")
     public boolean isInvalidTokenNotificationDisplayed()
     {
         return elementIsDisplayed(invalidTokenNotification);
+    }
+
+
+    @Override
+    public MainPage waitAfterEvent(int timeWaiting) throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(timeWaiting);
+        return this;
     }
 }

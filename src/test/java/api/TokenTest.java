@@ -1,8 +1,8 @@
 package api;
 
 import io.restassured.response.Response;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.Before;
+import org.junit.Test;
 import ru.miigaik.api.AuthApi;
 import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
@@ -24,7 +24,7 @@ public class TokenTest
     private String emailToken;
     private String email;
 
-    @BeforeEach
+    @Before
     public void setUp()
     {
         authApi = new AuthApi();
