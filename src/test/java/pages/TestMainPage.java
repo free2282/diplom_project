@@ -1,8 +1,6 @@
 package pages;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
-import io.qameta.allure.Param;
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
 
@@ -16,12 +14,10 @@ import ru.miigaik.api.AuthApi;
 import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
 import ru.miigaik.browser.Browsers;
-import ru.miigaik.browser.WebDrivermanaagment;
+import ru.miigaik.browser.WebDrivermanagment;
 import ru.miigaik.pages.MainPage;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
-import static ru.miigaik.action.Generator.setEmailToAuthRequest1Var;
 import static ru.miigaik.browser.Browsers.*;
 import static ru.miigaik.cfg.ConfigurationProject.MAIN_PAGE;
 import static ru.miigaik.action.Generator.setEmailToAuthRequest2Var;
@@ -61,8 +57,9 @@ public class TestMainPage
     {
         authApi = new AuthApi();
 
-        WebDrivermanaagment webDrivermanaagment = new WebDrivermanaagment();
-        driver = webDrivermanaagment.setDriver(browsers);
+        WebDrivermanagment webDrivermanagment = new WebDrivermanagment();
+        Allure.parameter("Проверка на браузере", browsers);
+        driver = webDrivermanagment.setDriver(browsers);
         driver.get(MAIN_PAGE);
 
         mainPage = new MainPage(driver);
@@ -70,7 +67,7 @@ public class TestMainPage
         email = emailRequestModel.getEmail();
     }
     @Test
-    @DisplayName("Проверка базовой аунтификации")
+    @DisplayName("Проверка базовой аунтификации browsers")
     @Description("Проверка базовой аунтификации, ожидание оказаться на странцие заполнения данных, будет доступна кнопка выйти из аккаунта")
     public void checkBaseAuthAfterClickingLogInButtonTest() throws InterruptedException
     {

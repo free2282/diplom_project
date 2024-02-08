@@ -1,6 +1,5 @@
 package ru.miigaik.browser;
 
-import com.codeborne.selenide.Browser;
 import io.qameta.allure.Step;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,12 +8,8 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.safari.SafariDriver;
 
-import static ru.miigaik.browser.Browsers.CHROME;
-import static ru.miigaik.browser.Browsers.YANDEX;
-
-public class WebDrivermanaagment
+public class WebDrivermanagment
 {
     private WebDriver driver;
 
@@ -37,7 +32,7 @@ public class WebDrivermanaagment
         return driver;
     }
 
-    @Step("Проверка теста на гугл хром браузере")
+    @Step("Проверка теста на chrome браузере")
     private WebDriver getChromeDriver()
     {
         System.setProperty("webdriver.chrome.driver", "browsers/chromedriver.exe");
@@ -58,7 +53,7 @@ public class WebDrivermanaagment
         return driver = new ChromeDriver(options);
     }
 
-    @Step("Проверка теста на файрфокс браузере")
+    @Step("Проверка теста на firefox браузере")
     private WebDriver getFireFoxDriver()
     {
         System.setProperty("webdriver.gecko.driver", "browsers/geckodriver.exe");
@@ -68,11 +63,10 @@ public class WebDrivermanaagment
         return driver = new FirefoxDriver();
     }
 
-    @Step("Проверка теста на эдж браузере")
+    @Step("Проверка теста на edge браузере")
     private WebDriver getEdgeBrowser()
     {
         System.setProperty("webdriver.edge.driver", "browsers/msedgedriver.exe");
-        EdgeOptions options = new EdgeOptions();
         return driver = new EdgeDriver();
     }
 }

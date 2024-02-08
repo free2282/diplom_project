@@ -5,7 +5,7 @@ import org.openqa.selenium.WebDriver;
 import ru.miigaik.api.AuthApi;
 import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
-import ru.miigaik.browser.WebDrivermanaagment;
+import ru.miigaik.browser.WebDrivermanagment;
 import ru.miigaik.pages.MainPage;
 
 import static ru.miigaik.action.Generator.setEmailToAuthRequest2Var;
@@ -16,7 +16,7 @@ public class QuickLogin
 {
     private WebDriver driver;
     private AuthApi authApi;
-    private WebDrivermanaagment webDrivermanaagment;
+    private WebDrivermanagment webDrivermanagment;
     private EmailResponseModel emailResponseModel;
     private EmailRequestModel emailRequestModel;
     private String email;
@@ -27,8 +27,8 @@ public class QuickLogin
     public QuickLogin()
     {
         authApi = new AuthApi();
-        webDrivermanaagment = new WebDrivermanaagment();
-        driver = webDrivermanaagment.setDriver(YANDEX);
+        webDrivermanagment = new WebDrivermanagment();
+        driver = webDrivermanagment.setDriver(YANDEX);
         mainPage = new MainPage(driver);
     }
 
