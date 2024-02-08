@@ -2,5 +2,5 @@ package ru.miigaik.browser;
 
 public enum Browsers
 {
-    CHROME, YANDEX
+    CHROME, YANDEX, FIREFOX, EDGE
 }

@@ -1,6 +1,7 @@
 package pages;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
+import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.response.Response;
@@ -8,21 +9,24 @@ import io.restassured.response.Response;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import ru.miigaik.api.AuthApi;
 import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
+import ru.miigaik.browser.Browsers;
 import ru.miigaik.browser.WebDrivermanaagment;
 import ru.miigaik.pages.MainPage;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
 import static ru.miigaik.action.Generator.setEmailToAuthRequest1Var;
-import static ru.miigaik.browser.Browsers.CHROME;
-import static ru.miigaik.browser.Browsers.YANDEX;
+import static ru.miigaik.browser.Browsers.*;
 import static ru.miigaik.cfg.ConfigurationProject.MAIN_PAGE;
 import static ru.miigaik.action.Generator.setEmailToAuthRequest2Var;
 
+@RunWith(Parameterized.class)
 public class TestMainPage
 {
     private MainPage mainPage;
@@ -33,6 +37,24 @@ public class TestMainPage
     private String token;
     private WebDriver driver;
     private boolean result;
+    private Browsers browsers;
+
+    public TestMainPage(Browsers browsers)
+    {
+        this.browsers = browsers;
+    }
+
+    @Parameterized.Parameters
+    public static Object[][] getEnterAccount()
+    {
+        return new Object[][]
+                {
+                {CHROME},
+                {YANDEX},
+                {FIREFOX},
+                {EDGE}
+        };
+    }
 
     @Before
     public void setUp()
@@ -40,8 +62,7 @@ public class TestMainPage
         authApi = new AuthApi();
 
         WebDrivermanaagment webDrivermanaagment = new WebDrivermanaagment();
-        driver = webDrivermanaagment.setDriver(CHROME);
-//        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver = webDrivermanaagment.setDriver(browsers);
         driver.get(MAIN_PAGE);
 
         mainPage = new MainPage(driver);
