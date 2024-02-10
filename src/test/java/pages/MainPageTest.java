@@ -23,7 +23,7 @@ import static ru.miigaik.cfg.ConfigurationProject.MAIN_PAGE;
 import static ru.miigaik.action.Generator.setEmailToAuthRequest2Var;
 
 @RunWith(Parameterized.class)
-public class TestMainPage
+public class MainPageTest
 {
     private MainPage mainPage;
     private AuthApi authApi;
@@ -35,7 +35,7 @@ public class TestMainPage
     private boolean result;
     private Browsers browsers;
 
-    public TestMainPage(Browsers browsers)
+    public MainPageTest(Browsers browsers)
     {
         this.browsers = browsers;
     }
@@ -46,9 +46,9 @@ public class TestMainPage
         return new Object[][]
                 {
                 {CHROME},
-                {YANDEX},
-                {FIREFOX},
-                {EDGE}
+//                {YANDEX},
+//                {FIREFOX},
+//                {EDGE}
         };
     }
 

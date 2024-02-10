@@ -1,8 +1,11 @@
 package ru.miigaik.generator;
 
+import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
 import ru.miigaik.api.model.auth.EmailRequestModel;
 import com.github.javafaker.service.FakeValuesService;
+import ru.miigaik.pages.ConsumerModel;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -33,5 +36,19 @@ public class Generator
         Matcher emailMatcher = Pattern.compile("\\w{4}\\d{2}@gmail.com").matcher(email);
 
         return new EmailRequestModel(email);
+    }
+
+    public static ConsumerModel setConsumersData()
+    {
+        Faker faker = new Faker(new Locale("ru"));
+
+        String name = faker.name().firstName();
+        String phoneNumber = faker.phoneNumber().phoneNumber();
+        String zipCode = faker.address().zipCode();
+        String state = faker.address().state();
+        String city = faker.address().city();
+        String street = faker.address().streetName();
+        String house = faker.address().buildingNumber();
+        return new ConsumerModel(name, phoneNumber, zipCode, state, city, street, house);
     }
 }

@@ -15,6 +15,7 @@ import org.junit.Assert;
 import javax.swing.*;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -38,6 +39,11 @@ public abstract class BasePage
         Allure.addAttachment("Поиск элемента по пути", xpath+"");
         return waitUntilPresenceOfElement(xpath, 5);
     }
+    protected List<WebElement> findElementsOnPage(By xpath)
+    {
+        Allure.addAttachment("Поиск элемента по пути", xpath+"");
+        return driver.findElements(xpath);
+    }
 
     protected WebElement findElementOnPage(By xpath)
     {
@@ -47,6 +53,7 @@ public abstract class BasePage
     {
         findElementOnPage(xpath).click();
     }
+
 
     protected void setDataToInputElement(By xpath, String data)
     {
