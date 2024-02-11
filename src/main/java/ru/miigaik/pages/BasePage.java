@@ -66,6 +66,11 @@ public abstract class BasePage
         findElementOnPage(xpath).sendKeys(data);
     }
 
+    public String  getTextOfElement(By xpath)
+    {
+        return findElementOnPage(xpath).getText();
+    }
+
     protected void isElementClickAble(By xpath)
     {
         assertTrue(waitUntilElementIsClickable(xpath,Duration.ofSeconds(5)).isDisplayed());

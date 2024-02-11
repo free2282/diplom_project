@@ -1,10 +1,14 @@
 package ru.miigaik.pages;
 
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
+import java.security.PublicKey;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -67,6 +71,12 @@ public class FormFirstPage extends BasePage
     private final By placeOfWork = By.xpath("//*[@id='root']/form/section[5]/div[1]/input");
     private final By workingPosition = By.xpath("//*[@id='root']/form/section[5]/div[2]/input");
     private final By periodOfWork = By.xpath("//*[@id='root']/form/section[5]/div[3]/input");
+    private final By NextButton = By.xpath(".//button[text()='Далее']");
+    private final By nextPageAsssureance = By.xpath(".//p[text()='Распечатайте сформированные документы, подпишите их и загрузите в данную анкету.']");
+
+    private final By errorFileType = By.xpath(".//span[text()='Тип файла может быть одним из следующих: image/jpeg image/jpg image/png']");
+    private final By errorFormatPhoneNumber = By.xpath(".//span[text()='Неверный формат номера телефона']");
+    private final By incorrectPhoneNumber = By.xpath(".//span[text()='Введен некорректный номер телефона.']");
 
     public FormFirstPage(WebDriver driver)
     {
@@ -80,6 +90,7 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Загрузка фото поступающего")
     public FormFirstPage uploadPhoto(String photoName)
     {
 
@@ -89,32 +100,41 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
-    public FormFirstPage quickSetName(String nameData)
+    @Step("Заполнение полей ФИО")
+    public FormFirstPage quickSetName(String nameValue)
     {
-        setDataToInputElement(surname, nameData);
-        setDataToInputElement(name, nameData);
-        setDataToInputElement(patronymic, nameData);
+        setDataToInputElement(surname, nameValue);
+        setDataToInputElement(name, nameValue);
+        setDataToInputElement(patronymic, nameValue);
+        Allure.addAttachment("В поле для имени, фамилии, отчества установленео значение", nameValue);
         return this;
     }
 
-    public FormFirstPage setSurname(String surnameData)
+    @Step("Заполнение поля фамилия")
+    public FormFirstPage setSurname(String surnameValue)
     {
-        setDataToInputElement(surname, surnameData);
+        setDataToInputElement(surname, surnameValue);
+        Allure.addAttachment("Значение",surnameValue);
         return this;
     }
 
-    public FormFirstPage setName(String surnameData)
+    @Step("Заполнение поля имя")
+    public FormFirstPage setName(String nameValue)
     {
-        setDataToInputElement(name, surnameData);
+        setDataToInputElement(name, nameValue);
+        Allure.addAttachment("Значение", nameValue);
         return this;
     }
 
-    public FormFirstPage setPatronymic(String surnameData)
+    @Step("Заполнение поля отчества")
+    public FormFirstPage setPatronymic(String patronymicValue)
     {
-        setDataToInputElement(patronymic, surnameData);
+        setDataToInputElement(patronymic, patronymicValue);
+        Allure.addAttachment("Значение", patronymicValue);
         return this;
     }
 
+    @Step("Выбор мужского пола")
     public FormFirstPage chooseMaleSex()
     {
         clickElementOnPage(sexDropDown);
@@ -122,6 +142,7 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Выбор женского пола")
     public FormFirstPage chooseFemaleSex()
     {
         clickElementOnPage(sexDropDown);
@@ -129,20 +150,25 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Установка даты рождения")
     public FormFirstPage setBirth(String date)
     {
         clickElementOnPage(birthData);
         setDataToInputElement(birthData, date);
+        Allure.addAttachment("Значение", date);
         return this;
     }
 
+    @Step("Установка страны рождения")
     public FormFirstPage setCountryAndCity(String countryInput, String cityInput)
     {
         String resultData = countryInput + ", " + cityInput;
         setDataToInputElement(countryAndCity, resultData);
+        Allure.addAttachment("Значение", resultData);
         return this;
     }
 
+    @Step("Установка значения гражданства")
     public FormFirstPage setCitizenship(String citizenshipDataUpperCase)
     {
 
@@ -150,16 +176,20 @@ public class FormFirstPage extends BasePage
 
         setDataToInputElement(citizenshipInput, citizenshipDataUpperCase);
         clickElementOnPage(By.xpath(".//div[text()='" + citizenshipDataUpperCase + "' and @role='option']"));
+        Allure.addAttachment("Значение", citizenshipDataUpperCase);
         return this;
     }
 
+    @Step("Установка номера телефона")
     public FormFirstPage setPhoneNumber(String phoneNumberData)
     {
         clickElementOnPage(phoneNumber);
         setDataToInputElement(phoneNumber, phoneNumberData);
+        Allure.addAttachment("Значение", phoneNumberData);
         return this;
     }
 
+    @Step("Установка среднего уровня образования")
     public FormFirstPage setMiddleGradeLevel()
     {
         clickElementOnPage(gradeLevelDropDown);
@@ -167,26 +197,33 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Установка высшего уровня образования")
     public FormFirstPage setHighGradeLevel()
     {
         clickElementOnPage(gradeLevelDropDown);
         clickElementOnPage(highGradeLevel);
         return this;
     }
-    public FormFirstPage setSnils(String snilsData)
+
+    @Step("Установка номера СНИЛСа")
+    public FormFirstPage setSnils(String snilsValue)
     {
         clickElementOnPage(snils);
-        setDataToInputElement(snils, snilsData);
+        setDataToInputElement(snils, snilsValue);
+        Allure.addAttachment("Значение", snilsValue);
         return this;
     }
 
+    @Step("Установка даты регистрации СНИЛСа")
     public FormFirstPage setSnilsRegistrationDate(String date)
     {
         clickElementOnPage(snilsRegistrationDate);
         setDataToInputElement(snilsRegistrationDate, date);
+        Allure.addAttachment("Значение", date);
         return this;
     }
 
+    @Step("Установка инвалидности 'Нет'")
     public FormFirstPage setDisabilityNo()
     {
         clickElementOnPage(disabilityDropDown);
@@ -194,6 +231,7 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Установка инвалидности 'Да'")
     public FormFirstPage setDisabilityYes()
     {
         clickElementOnPage(disabilityDropDown);
@@ -201,6 +239,7 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Выбор программы обучения")
     public FormFirstPage setEducationProgram(int programOrder)
     {
         clickElementOnPage(educationProgramDropDown);
@@ -209,9 +248,11 @@ public class FormFirstPage extends BasePage
         String[] allProgram = allProgramFromElement.get(0).getText().split("\n");
 
         clickElementOnPage(By.xpath(".//div[text()='"+ allProgram[programOrder]+"']"));
+        Allure.addAttachment("Выбор программы обучения", allProgram[programOrder]);
         return this;
     }
 
+    @Step("Установка русского паспорта")
     public FormFirstPage setRussianPasport()
     {
         clickElementOnPage(dulDropDown);
@@ -219,6 +260,7 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Установка паспорта другой страны")
     public FormFirstPage setOtherCountryPasport()
     {
         clickElementOnPage(dulDropDown);
@@ -226,137 +268,243 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
+    @Step("Установка значения серии паспорта")
     public FormFirstPage setDulSeries(String series)
     {
         clickElementOnPage(dulSeries);
         setDataToInputElement(dulSeries, series);
+        Allure.addAttachment("Значение", series);
         return this;
     }
-
+    @Step("Установка значения номера паспорта")
     public FormFirstPage setDulNumber(String number)
     {
         clickElementOnPage(dulNumber);
         setDataToInputElement(dulNumber, number);
+        Allure.addAttachment("Значение", number);
         return this;
     }
 
+    @Step("Установка органа, выдавшего паспорт")
     public FormFirstPage setGovernmentAgency(String nameAgency)
     {
         setDataToInputElement(governmentAgency, nameAgency);
+        Allure.addAttachment("Значение", nameAgency);
         return this;
     }
 
+    @Step("Устаноовка кода подразделения")
     public FormFirstPage setCodeAgency(String codeOfAgency)
     {
         clickElementOnPage(codeOfGavAgency);
         setDataToInputElement(codeOfGavAgency, codeOfAgency);
+        Allure.addAttachment("Значение", codeOfAgency);
         return this;
     }
 
+    @Step("Усстановка даты получения паспорта")
     public FormFirstPage setDateOfReceiptDul(String date)
     {
         clickElementOnPage(dateOfReceiptDul);
         setDataToInputElement(dateOfReceiptDul, date);
+        Allure.addAttachment("Значение", date);
         return this;
     }
 
+    @Step("Устанвока индекса регистрации")
     public FormFirstPage setZipCode(String index)
     {
         clickElementOnPage(zipCode);
         setDataToInputElement(zipCode, index);
+        Allure.addAttachment("Значение", index);
         return this;
     }
 
+    @Step("Установка страны регистрации")
     public FormFirstPage setCountryOfRegistration(String registrationCountryUpperCase)
     {
         clickElementOnPage(registrationCountryDropDown);
 
         setDataToInputElement(registrationCountryInput, registrationCountryUpperCase);
         clickElementOnPage(By.xpath(".//div[text()='" + registrationCountryUpperCase + "' and @role='option']"));
+        Allure.addAttachment("Значение", registrationCountryUpperCase);
         return this;
     }
 
-    public FormFirstPage setStateOfRegistration(String stateData)
+    @Step("Установка области/региона регистрации")
+    public FormFirstPage setStateOfRegistration(String stateValue)
     {
         clickElementOnPage(state);
-        setDataToInputElement(state, stateData);
+        setDataToInputElement(state, stateValue);
+        Allure.addAttachment("Значение", stateValue);
         return this;
     }
 
-    public FormFirstPage setCityOfregistration(String cityData)
+    @Step("Установка города регистрации")
+    public FormFirstPage setCityOfregistration(String cityValue)
     {
         clickElementOnPage(city);
-        setDataToInputElement(city, cityData);
+        setDataToInputElement(city, cityValue);
+        Allure.addAttachment("Значение", cityValue);
         return this;
     }
 
-    public FormFirstPage setStreetOfRegistration(String streetData)
+    @Step("Установка улицы регистрации")
+    public FormFirstPage setStreetOfRegistration(String streetValue)
     {
         clickElementOnPage(street);
-        setDataToInputElement(street, streetData);
+        setDataToInputElement(street, streetValue);
+        Allure.addAttachment("Значение", streetValue);
         return this;
     }
 
+    @Step("Установка дома регистрации")
     public FormFirstPage setHouseOfRegistration(String houseOfRegistrationData)
     {
         clickElementOnPage(house);
         setDataToInputElement(house, houseOfRegistrationData);
+        Allure.addAttachment("Значение", houseOfRegistrationData);
         return this;
     }
 
+    @Step("Установка наименование образовательной организации предыдущего места обучения")
     public FormFirstPage setNamingOfEducationOrganization(String educationOrganization)
     {
         clickElementOnPage(namingOfEducationOrganization);
         setDataToInputElement(namingOfEducationOrganization, educationOrganization);
+        Allure.addAttachment("Значение", educationOrganization);
         return this;
     }
 
+    @Step("Установка направления подготовки предыдущего места обучени")
     public FormFirstPage setUniversitySpecialty(String specialty)
     {
         clickElementOnPage(universitySpecialty);
         setDataToInputElement(universitySpecialty, specialty);
+        Allure.addAttachment("Значение", specialty);
         return this;
     }
 
+    @Step("Устанвока серии и номера диплома")
     public FormFirstPage setDiplomNumberAndSeries(String numberAndSeries)
     {
         clickElementOnPage(diplomNumberAndSeries);
         setDataToInputElement(diplomNumberAndSeries, numberAndSeries);
+        Allure.addAttachment("Значение", numberAndSeries);
         return this;
     }
 
+    @Step("Установка даты получения диплома")
     public FormFirstPage setDateOfReceiptDiplom(String date)
     {
         clickElementOnPage(dateOfReceiptDiplom);
         setDataToInputElement(dateOfReceiptDiplom, date);
+        Allure.addAttachment("Значение", date);
         return this;
     }
 
+    @Step("Установка года окончяания обучения")
     public FormFirstPage setYearOfEnding(String year)
     {
         clickElementOnPage(yearOfEnding);
         setDataToInputElement(yearOfEnding, year);
+        Allure.addAttachment("Значение", year);
         return this;
     }
 
+    @Step("Устанвока места работы")
     public FormFirstPage setPlaceOfWork(String placeOfWorkData)
     {
         clickElementOnPage(placeOfWork);
         setDataToInputElement(placeOfWork, placeOfWorkData);
+        Allure.addAttachment("Значение", placeOfWorkData);
         return this;
     }
 
+    @Step("Установка занимаемой должности")
     public FormFirstPage setWorkingPosition(String positiion)
     {
         clickElementOnPage(workingPosition);
         setDataToInputElement(workingPosition, positiion);
+        Allure.addAttachment("Значение", positiion);
         return this;
     }
 
+    @Step("Установка периода работы")
     public FormFirstPage setPeriodOfWork(String periodOfWorkData)
     {
         clickElementOnPage(periodOfWork);
         setDataToInputElement(periodOfWork, periodOfWorkData);
+        Allure.addAttachment("Значение", periodOfWorkData);
         return this;
     }
+
+    @Step("Проверка видимости ошибки при загрузке файла не того разрешения в место фотографии")
+    public boolean isErrorFileTypeTextVisible()
+    {
+        boolean result = findElementOnPage(errorFileType).isDisplayed();
+
+        String resultToString = result +"";
+        Allure.addAttachment("Значение", resultToString);
+
+        return result;
+    }
+
+    @Step("Получение текста ошибки при загрузке файла не того разрешения")
+    public String getTextOfErrorFileType()
+    {
+        String result =  getTextOfElement(errorFileType);
+        Allure.addAttachment("Значение", result);
+        return result;
+    }
+
+    @Step("Нажатие на кнопку далее")
+    public FormFirstPage clickNextButton()
+    {
+        clickElementOnPage(NextButton);
+        return this;
+    }
+
+    @Step("Проверка видимости надписи на второй странице заполнения данных после нажатия кнопки Далее")
+    public boolean isTextSecondPageVisible()
+    {
+        return findElementOnPage(nextPageAsssureance).isDisplayed();
+    }
+
+    @Step("Проверка видимости ошибки при ошибочном формате номера")
+    public Boolean isErrorFormatPhoneNumberNotificationVisible()
+    {
+        boolean result = findElementOnPage(errorFormatPhoneNumber).isDisplayed();
+        String resultToString = result +"";
+        Allure.addAttachment("Значение", resultToString);
+
+        return result;
+    }
+
+    @Step("Проверка значения ошибки ошибочный формате номера")
+    public String getTextOfErrorFormatPhoneNumber()
+    {
+        String result =  getTextOfElement(errorFormatPhoneNumber);
+        Allure.addAttachment("Значение", result);
+        return result;
+    }
+
+    @Step("Проверка видимости ошибки при ошибочном коде страны")
+    public Boolean isIncorrectPhoneNumberNotificationVisible()
+    {
+        boolean result = findElementOnPage(incorrectPhoneNumber).isDisplayed();
+        String resultToString = result +"";
+        Allure.addAttachment("Значение", resultToString);
+
+        return result;
+    }
+
+    @Step("Проверка значения ошибки при ошибочном коде страны")
+    public String getTextOfIncorrectPhoneNumber()
+    {
+        String result =  getTextOfElement(incorrectPhoneNumber);
+        Allure.addAttachment("Значение", result);
+        return result;
+    }
+
 }
