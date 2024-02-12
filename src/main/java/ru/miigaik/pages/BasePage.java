@@ -132,7 +132,12 @@ public abstract class BasePage
     }
 
 
-    public abstract BasePage waitAfterEvent(int timeWaiting) throws InterruptedException;
+    public BasePage waitAfterEvent(int timeWaiting) throws InterruptedException
+    {
+        TimeUnit.SECONDS.sleep(timeWaiting);
+        return this;
+
+    };
 
 
 //    public WebElement waitElementHaveAttributesToBe(By xpath, int timeOutSeconds, String attributes)

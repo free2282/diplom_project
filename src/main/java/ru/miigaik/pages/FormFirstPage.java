@@ -3,14 +3,11 @@ package ru.miigaik.pages;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.io.File;
-import java.security.PublicKey;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class FormFirstPage extends BasePage
 {
@@ -77,99 +74,104 @@ public class FormFirstPage extends BasePage
     private final By errorFileType = By.xpath(".//span[text()='Тип файла может быть одним из следующих: image/jpeg image/jpg image/png']");
     private final By errorFormatPhoneNumber = By.xpath(".//span[text()='Неверный формат номера телефона']");
     private final By incorrectPhoneNumber = By.xpath(".//span[text()='Введен некорректный номер телефона.']");
-
+    private final By errorAgeLess14 = By.xpath(".//span[text()='Регистрация возможна только для лиц от 14 лет. Исправьте дату своего рождения.']");
+    private final By errorThisFieldAreRequired = By.xpath(".//span[text()='Поле обязательно к заполнению']");
+    private final By errorSumOfSnilsnumber = By.xpath(".//span[text()='Неверное контрольное число.']");
     public FormFirstPage(WebDriver driver)
     {
         super(driver);
     }
 
-    @Override
-    public FormFirstPage waitAfterEvent(int timeWaiting) throws InterruptedException
-    {
-        TimeUnit.SECONDS.sleep(timeWaiting);
-        return this;
-    }
 
     @Step("Загрузка фото поступающего")
-    public FormFirstPage uploadPhoto(String photoName)
+    public FormFirstPage uploadPhoto(String photoName) throws InterruptedException
     {
 
         findElementOnPage(photoUploadPlace).sendKeys(
                 new File("./attach/"+photoName).getAbsolutePath()
         );
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Заполнение полей ФИО")
-    public FormFirstPage quickSetName(String nameValue)
+    public FormFirstPage quickSetName(String nameValue) throws InterruptedException
     {
         setDataToInputElement(surname, nameValue);
         setDataToInputElement(name, nameValue);
         setDataToInputElement(patronymic, nameValue);
         Allure.addAttachment("В поле для имени, фамилии, отчества установленео значение", nameValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Заполнение поля фамилия")
-    public FormFirstPage setSurname(String surnameValue)
+    public FormFirstPage setSurname(String surnameValue) throws InterruptedException
     {
         setDataToInputElement(surname, surnameValue);
         Allure.addAttachment("Значение",surnameValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Заполнение поля имя")
-    public FormFirstPage setName(String nameValue)
+    public FormFirstPage setName(String nameValue) throws InterruptedException
     {
         setDataToInputElement(name, nameValue);
         Allure.addAttachment("Значение", nameValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Заполнение поля отчества")
-    public FormFirstPage setPatronymic(String patronymicValue)
+    public FormFirstPage setPatronymic(String patronymicValue) throws InterruptedException
     {
         setDataToInputElement(patronymic, patronymicValue);
         Allure.addAttachment("Значение", patronymicValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Выбор мужского пола")
-    public FormFirstPage chooseMaleSex()
+    public FormFirstPage chooseMaleSex() throws InterruptedException
     {
         clickElementOnPage(sexDropDown);
         clickElementOnPage(male);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Выбор женского пола")
-    public FormFirstPage chooseFemaleSex()
+    public FormFirstPage chooseFemaleSex() throws InterruptedException
     {
         clickElementOnPage(sexDropDown);
         clickElementOnPage(female);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка даты рождения")
-    public FormFirstPage setBirth(String date)
+    public FormFirstPage setBirth(String date) throws InterruptedException
     {
         clickElementOnPage(birthData);
         setDataToInputElement(birthData, date);
         Allure.addAttachment("Значение", date);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка страны рождения")
-    public FormFirstPage setCountryAndCity(String countryInput, String cityInput)
+    public FormFirstPage setBirthPlaceCountryAndCity(String countryInput, String cityInput) throws InterruptedException
     {
         String resultData = countryInput + ", " + cityInput;
         setDataToInputElement(countryAndCity, resultData);
         Allure.addAttachment("Значение", resultData);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка значения гражданства")
-    public FormFirstPage setCitizenship(String citizenshipDataUpperCase)
+    public FormFirstPage setCitizenship(String citizenshipDataUpperCase) throws InterruptedException
     {
 
         clickElementOnPage(citizenshipDropDown);
@@ -177,70 +179,78 @@ public class FormFirstPage extends BasePage
         setDataToInputElement(citizenshipInput, citizenshipDataUpperCase);
         clickElementOnPage(By.xpath(".//div[text()='" + citizenshipDataUpperCase + "' and @role='option']"));
         Allure.addAttachment("Значение", citizenshipDataUpperCase);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка номера телефона")
-    public FormFirstPage setPhoneNumber(String phoneNumberData)
+    public FormFirstPage setPhoneNumber(String phoneNumberData) throws InterruptedException
     {
         clickElementOnPage(phoneNumber);
         setDataToInputElement(phoneNumber, phoneNumberData);
         Allure.addAttachment("Значение", phoneNumberData);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка среднего уровня образования")
-    public FormFirstPage setMiddleGradeLevel()
+    public FormFirstPage setMiddleGradeLevel() throws InterruptedException
     {
         clickElementOnPage(gradeLevelDropDown);
         clickElementOnPage(middleGradeLevel);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка высшего уровня образования")
-    public FormFirstPage setHighGradeLevel()
+    public FormFirstPage setHighGradeLevel() throws InterruptedException
     {
         clickElementOnPage(gradeLevelDropDown);
         clickElementOnPage(highGradeLevel);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка номера СНИЛСа")
-    public FormFirstPage setSnils(String snilsValue)
+    public FormFirstPage setSnils(String snilsValue) throws InterruptedException
     {
         clickElementOnPage(snils);
         setDataToInputElement(snils, snilsValue);
         Allure.addAttachment("Значение", snilsValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка даты регистрации СНИЛСа")
-    public FormFirstPage setSnilsRegistrationDate(String date)
+    public FormFirstPage setSnilsRegistrationDate(String date) throws InterruptedException
     {
         clickElementOnPage(snilsRegistrationDate);
         setDataToInputElement(snilsRegistrationDate, date);
         Allure.addAttachment("Значение", date);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка инвалидности 'Нет'")
-    public FormFirstPage setDisabilityNo()
+    public FormFirstPage setDisabilityNo() throws InterruptedException
     {
         clickElementOnPage(disabilityDropDown);
         clickElementOnPage(disabilityNo);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка инвалидности 'Да'")
-    public FormFirstPage setDisabilityYes()
+    public FormFirstPage setDisabilityYes() throws InterruptedException
     {
         clickElementOnPage(disabilityDropDown);
         clickElementOnPage(disabilityYes);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Выбор программы обучения")
-    public FormFirstPage setEducationProgram(int programOrder)
+    public FormFirstPage setEducationProgram(int programOrder) throws InterruptedException
     {
         clickElementOnPage(educationProgramDropDown);
 
@@ -249,262 +259,323 @@ public class FormFirstPage extends BasePage
 
         clickElementOnPage(By.xpath(".//div[text()='"+ allProgram[programOrder]+"']"));
         Allure.addAttachment("Выбор программы обучения", allProgram[programOrder]);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка русского паспорта")
-    public FormFirstPage setRussianPasport()
+    public FormFirstPage setRussianPasport() throws InterruptedException
     {
         clickElementOnPage(dulDropDown);
         clickElementOnPage(pasportRf);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка паспорта другой страны")
-    public FormFirstPage setOtherCountryPasport()
+    public FormFirstPage setOtherCountryPasport() throws InterruptedException
     {
         clickElementOnPage(dulDropDown);
         clickElementOnPage(pasportOtherCountry);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка значения серии паспорта")
-    public FormFirstPage setDulSeries(String series)
+    public FormFirstPage setDulSeries(String series) throws InterruptedException
     {
         clickElementOnPage(dulSeries);
         setDataToInputElement(dulSeries, series);
         Allure.addAttachment("Значение", series);
+        waitAfterEvent(1);
         return this;
     }
+
+    @Step("Получить значние в ячейке серия паспортиа")
+    public String getDulSeriesValue(String dulSeries)
+    {
+        return findElementOnPage(By.xpath("//*[@id='root']/form/section[2]/div[2]/input[@value='" + dulSeries+"']")).getText();
+    }
+    @Step("Проверка правильности валидации серии паспорта при гражданстве РФ")
+    public boolean checkDulSeriesValidation(String dulSeries) //123456
+    {
+        String[] numbersOfSeries = dulSeries.split("");
+        String refactorDulSeries = numbersOfSeries[0] + numbersOfSeries[1] + " " + numbersOfSeries[2] + numbersOfSeries[3];
+        return findElementOnPage(By.xpath("//*[@id='root']/form/section[2]/div[2]/input[@value='" + refactorDulSeries+"']")).isDisplayed();
+    }
     @Step("Установка значения номера паспорта")
-    public FormFirstPage setDulNumber(String number)
+    public FormFirstPage setDulNumber(String number) throws InterruptedException
     {
         clickElementOnPage(dulNumber);
         setDataToInputElement(dulNumber, number);
         Allure.addAttachment("Значение", number);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка органа, выдавшего паспорт")
-    public FormFirstPage setGovernmentAgency(String nameAgency)
+    public FormFirstPage setGovernmentAgency(String nameAgency) throws InterruptedException
     {
         setDataToInputElement(governmentAgency, nameAgency);
         Allure.addAttachment("Значение", nameAgency);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Устаноовка кода подразделения")
-    public FormFirstPage setCodeAgency(String codeOfAgency)
+    public FormFirstPage setCodeAgency(String codeOfAgency) throws InterruptedException
     {
         clickElementOnPage(codeOfGavAgency);
         setDataToInputElement(codeOfGavAgency, codeOfAgency);
         Allure.addAttachment("Значение", codeOfAgency);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Усстановка даты получения паспорта")
-    public FormFirstPage setDateOfReceiptDul(String date)
+    public FormFirstPage setDateOfReceiptDul(String date) throws InterruptedException
     {
         clickElementOnPage(dateOfReceiptDul);
         setDataToInputElement(dateOfReceiptDul, date);
         Allure.addAttachment("Значение", date);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Устанвока индекса регистрации")
-    public FormFirstPage setZipCode(String index)
+    public FormFirstPage setZipCode(String index) throws InterruptedException
     {
         clickElementOnPage(zipCode);
         setDataToInputElement(zipCode, index);
         Allure.addAttachment("Значение", index);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка страны регистрации")
-    public FormFirstPage setCountryOfRegistration(String registrationCountryUpperCase)
+    public FormFirstPage setCountryOfRegistration(String registrationCountryUpperCase) throws InterruptedException
     {
         clickElementOnPage(registrationCountryDropDown);
 
         setDataToInputElement(registrationCountryInput, registrationCountryUpperCase);
         clickElementOnPage(By.xpath(".//div[text()='" + registrationCountryUpperCase + "' and @role='option']"));
         Allure.addAttachment("Значение", registrationCountryUpperCase);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка области/региона регистрации")
-    public FormFirstPage setStateOfRegistration(String stateValue)
+    public FormFirstPage setStateOfRegistration(String stateValue) throws InterruptedException
     {
         clickElementOnPage(state);
         setDataToInputElement(state, stateValue);
         Allure.addAttachment("Значение", stateValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка города регистрации")
-    public FormFirstPage setCityOfregistration(String cityValue)
+    public FormFirstPage setCityOfRegistration(String cityValue) throws InterruptedException
     {
         clickElementOnPage(city);
         setDataToInputElement(city, cityValue);
         Allure.addAttachment("Значение", cityValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка улицы регистрации")
-    public FormFirstPage setStreetOfRegistration(String streetValue)
-    {
+    public FormFirstPage setStreetOfRegistration(String streetValue) throws InterruptedException {
         clickElementOnPage(street);
         setDataToInputElement(street, streetValue);
         Allure.addAttachment("Значение", streetValue);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка дома регистрации")
-    public FormFirstPage setHouseOfRegistration(String houseOfRegistrationData)
-    {
+    public FormFirstPage setHouseOfRegistration(String houseOfRegistrationData) throws InterruptedException {
         clickElementOnPage(house);
         setDataToInputElement(house, houseOfRegistrationData);
         Allure.addAttachment("Значение", houseOfRegistrationData);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка наименование образовательной организации предыдущего места обучения")
-    public FormFirstPage setNamingOfEducationOrganization(String educationOrganization)
-    {
+    public FormFirstPage setNamingOfEducationOrganization(String educationOrganization) throws InterruptedException {
         clickElementOnPage(namingOfEducationOrganization);
         setDataToInputElement(namingOfEducationOrganization, educationOrganization);
         Allure.addAttachment("Значение", educationOrganization);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка направления подготовки предыдущего места обучени")
-    public FormFirstPage setUniversitySpecialty(String specialty)
-    {
+    public FormFirstPage setUniversitySpecialty(String specialty) throws InterruptedException {
         clickElementOnPage(universitySpecialty);
         setDataToInputElement(universitySpecialty, specialty);
         Allure.addAttachment("Значение", specialty);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Устанвока серии и номера диплома")
-    public FormFirstPage setDiplomNumberAndSeries(String numberAndSeries)
-    {
+    public FormFirstPage setDiplomNumberAndSeries(String numberAndSeries) throws InterruptedException {
         clickElementOnPage(diplomNumberAndSeries);
         setDataToInputElement(diplomNumberAndSeries, numberAndSeries);
         Allure.addAttachment("Значение", numberAndSeries);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка даты получения диплома")
-    public FormFirstPage setDateOfReceiptDiplom(String date)
-    {
+    public FormFirstPage setDateOfReceiptDiplom(String date) throws InterruptedException {
         clickElementOnPage(dateOfReceiptDiplom);
         setDataToInputElement(dateOfReceiptDiplom, date);
         Allure.addAttachment("Значение", date);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка года окончяания обучения")
-    public FormFirstPage setYearOfEnding(String year)
-    {
+    public FormFirstPage setYearOfEnding(String year) throws InterruptedException {
         clickElementOnPage(yearOfEnding);
         setDataToInputElement(yearOfEnding, year);
         Allure.addAttachment("Значение", year);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Устанвока места работы")
-    public FormFirstPage setPlaceOfWork(String placeOfWorkData)
-    {
+    public FormFirstPage setPlaceOfWork(String placeOfWorkData) throws InterruptedException {
         clickElementOnPage(placeOfWork);
         setDataToInputElement(placeOfWork, placeOfWorkData);
         Allure.addAttachment("Значение", placeOfWorkData);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка занимаемой должности")
-    public FormFirstPage setWorkingPosition(String positiion)
-    {
+    public FormFirstPage setWorkingPosition(String positiion) throws InterruptedException {
         clickElementOnPage(workingPosition);
         setDataToInputElement(workingPosition, positiion);
         Allure.addAttachment("Значение", positiion);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Установка периода работы")
-    public FormFirstPage setPeriodOfWork(String periodOfWorkData)
-    {
+    public FormFirstPage setPeriodOfWork(String periodOfWorkData) throws InterruptedException {
         clickElementOnPage(periodOfWork);
         setDataToInputElement(periodOfWork, periodOfWorkData);
         Allure.addAttachment("Значение", periodOfWorkData);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Проверка видимости ошибки при загрузке файла не того разрешения в место фотографии")
-    public boolean isErrorFileTypeTextVisible()
-    {
+    public boolean isErrorFileTypeTextVisible() throws InterruptedException {
         boolean result = findElementOnPage(errorFileType).isDisplayed();
 
         String resultToString = result +"";
         Allure.addAttachment("Значение", resultToString);
-
+        waitAfterEvent(1);
         return result;
     }
 
     @Step("Получение текста ошибки при загрузке файла не того разрешения")
-    public String getTextOfErrorFileType()
-    {
+    public String getTextOfErrorFileType() throws InterruptedException {
         String result =  getTextOfElement(errorFileType);
         Allure.addAttachment("Значение", result);
+        waitAfterEvent(1);
         return result;
     }
 
     @Step("Нажатие на кнопку далее")
-    public FormFirstPage clickNextButton()
-    {
+    public FormFirstPage clickNextButton() throws InterruptedException {
         clickElementOnPage(NextButton);
+        waitAfterEvent(1);
         return this;
     }
 
     @Step("Проверка видимости надписи на второй странице заполнения данных после нажатия кнопки Далее")
-    public boolean isTextSecondPageVisible()
+    public boolean isTextSecondPageVisible() throws InterruptedException
     {
+        waitAfterEvent(1);
         return findElementOnPage(nextPageAsssureance).isDisplayed();
     }
 
     @Step("Проверка видимости ошибки при ошибочном формате номера")
-    public Boolean isErrorFormatPhoneNumberNotificationVisible()
-    {
+    public Boolean isErrorFormatPhoneNumberNotificationVisible() throws InterruptedException {
         boolean result = findElementOnPage(errorFormatPhoneNumber).isDisplayed();
         String resultToString = result +"";
         Allure.addAttachment("Значение", resultToString);
-
+        waitAfterEvent(1);
         return result;
     }
 
     @Step("Проверка значения ошибки ошибочный формате номера")
-    public String getTextOfErrorFormatPhoneNumber()
-    {
+    public String getTextOfErrorFormatPhoneNumber() throws InterruptedException {
         String result =  getTextOfElement(errorFormatPhoneNumber);
         Allure.addAttachment("Значение", result);
+        waitAfterEvent(1);
         return result;
     }
 
     @Step("Проверка видимости ошибки при ошибочном коде страны")
-    public Boolean isIncorrectPhoneNumberNotificationVisible()
+    public Boolean isIncorrectPhoneNumberNotificationVisible() throws InterruptedException
     {
         boolean result = findElementOnPage(incorrectPhoneNumber).isDisplayed();
         String resultToString = result +"";
         Allure.addAttachment("Значение", resultToString);
+        waitAfterEvent(1);
 
         return result;
     }
 
     @Step("Проверка значения ошибки при ошибочном коде страны")
-    public String getTextOfIncorrectPhoneNumber()
+    public String getTextOfIncorrectPhoneNumber() throws InterruptedException
     {
         String result =  getTextOfElement(incorrectPhoneNumber);
         Allure.addAttachment("Значение", result);
+        waitAfterEvent(1);
         return result;
     }
 
+    @Step("Проверка видимости ошибки о возрасте, младшем 14 лет")
+    public boolean isErrorLess14YearsOldIsDisplayed()
+    {
+        return findElementOnPage(errorAgeLess14).isDisplayed();
+    }
+
+    @Step("Проверка значения ошибки при возрасте, младшем 14 лет")
+    public String getTextOfLess14YearsOldError()
+    {
+        return findElementOnPage(errorAgeLess14).getText();
+    }
+
+    @Step("Проверка видимости ошибки обязательности заполнения")
+    public boolean isErrorRequiredFieldVisible()
+    {
+        return findElementOnPage(errorThisFieldAreRequired).isDisplayed();
+    }
+
+    @Step("Проверка текста ошибки обязательности заполнения")
+    public String getErrorTextFieldAreRequired()
+    {
+        return findElementOnPage(errorThisFieldAreRequired).getText();
+    }
+
+    @Step("Проверка ошибки контрольного числа снилс")
+    public boolean isErrorSumSnilsDisplayed()
+    {
+        return findElementOnPage(errorSumOfSnilsnumber).isDisplayed();
+    }
+
+    @Step("Проверка ошибки контрольного числа снилс")
+    public String getErrorSumSnilsText()
+    {
+        return findElementOnPage(errorSumOfSnilsnumber).getText();
+    }
 }
