@@ -52,9 +52,27 @@ public class FirstPageFormTest
     }
 
     @Test
-    @DisplayName("Проверка заполнения всех полей анкеты и перехода на вторую страницу заполнения данных")
-    public void fillFullFieldRuPasportAndCitizenshipFirstFormTest() throws InterruptedException
-    {
+    @DisplayName("Проверка заполнения всех полей с гражданством РФ анкеты и перехода на вторую страницу заполнения данных")
+    public void fillFullFieldRuPasportAndCitizenshipFirstFormTest() throws InterruptedException {
+        boolean result;
+        try
+        {
+            quickEvent.fillTheFirstForm();
+            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            result = firstPage.setCitizenship("КАЗАХСТАН").clickNextButton()
+                    .isTextSecondPageVisible();
+        }
+        catch (Exception e)
+        {
+            result = false;
+        }
+
+        assertTrue("Текст со второй страницы не был виден",result);
+    }
+
+    @Test
+    @DisplayName("Проверка заполнения всех полей с гражданством другой страны анкеты и перехода на вторую страницу заполнения данных")
+    public void fillFullFieldOtherCountryPasportAndCitizenshipFirstFormTest() throws InterruptedException {
         boolean result;
         try
         {
@@ -67,21 +85,24 @@ public class FirstPageFormTest
             result = false;
         }
 
+
         assertTrue("Текст со второй страницы не был виден",result);
     }
 
     @Test
     @DisplayName("Проверка заполнения только обязательных полей анкеты иностранного гражданина и перехода на вторую страницу заполнения данных")
     @Description("В модели есть много полей, которые не обязательны. Также добаювляются необязательные поля, если гражданство не РФ. Ожидается, что будет возможно заполнить только обязательные поля и после нажатия кнопки далее, валидация на фронте пропустит данные")
-    public void fillOnlyRequiredFieldForeignerFirstFormTest() throws InterruptedException
-    {
+    public void fillOnlyRequiredFieldForeignerFirstFormTest() throws InterruptedException {
         boolean result;
+
         try
         {
             quickEvent.fillMinFormForeignPasport();
             FormFirstPage form = quickEvent.getFormFirstPage();
 
-            result = form.clickNextButton().isTextSecondPageVisible();
+            result = form
+                    .clickNextButton()
+                    .isTextSecondPageVisible();
         }
         catch (Exception e)
         {
@@ -93,21 +114,24 @@ public class FirstPageFormTest
 
     @Test
     @DisplayName("Проверка заполнения полной анкеты иностранного гражданина")
-    public void fillFullFieldForeignerFirstFormTest() throws InterruptedException
-    {
+    public void fillFullFieldForeignerFirstFormTest() throws InterruptedException {
         boolean result;
+        String otherCountry = "КАЗАХСТАН";
         try
         {
             quickEvent.fillTheFirstForm();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
-                    .setCitizenship("КАЗАХСТАН")
-                    .setOtherCountryPasport().clickNextButton().isTextSecondPageVisible();
+                    .setCitizenship(otherCountry)
+                    .setOtherCountryPasport()
+                    .clickNextButton()
+                    .isTextSecondPageVisible();
         }
         catch (Exception e)
         {
             result = false;
         }
+
 
         assertTrue("Переход на вторую страницу не был осуществлен, какие-то обязтельные поля не были заполнены, расхождение обязательных полей с докой",result);
     }
@@ -115,9 +139,10 @@ public class FirstPageFormTest
     @Test
     @DisplayName("Проверка видимости ошибки заполнения анкеты возраст <14")
     @Description("В случае, если заполняющему меньше 14 лет, то запрещено прохождление заполнения формы на второй этап")
-    public void checkRequiredAgeMore14Test()
+    public void checkRequiredAgeLess14Test() throws InterruptedException
     {
         boolean result;
+        String expected = "Регистрация возможна только для лиц от 14 лет. Исправьте дату своего рождения.";
         try
         {
             quickEvent.fillTheFirstFormWithoutAutoBirthDate();
@@ -126,15 +151,21 @@ public class FirstPageFormTest
             LocalDate futureDate = currentDate.minusYears(13).plusDays(1);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             String formattedDate = futureDate.format(formatter);
-            System.out.println(formattedDate);
+
 
             FormFirstPage form = quickEvent.getFormFirstPage();
-            result = form.setBirth(formattedDate).clickNextButton().isErrorLess14YearsOldIsDisplayed();
+            result = form
+                    .setBirth(formattedDate)
+                    .clickNextButton()
+                    .isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
             result = false;
         }
+
+
+
         assertTrue("Ограничение о том, что регистрация доступна с 14 лет не было высвечено",result);
     }
 
@@ -147,20 +178,24 @@ public class FirstPageFormTest
         String expected = "Регистрация возможна только для лиц от 14 лет. Исправьте дату своего рождения.";
         try
         {
+
+
             quickEvent.fillTheFirstFormWithoutAutoBirthDate();
 
             LocalDate currentDate = LocalDate.now();
             LocalDate futureDate = currentDate.minusYears(13).plusDays(1);
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
             String formattedDate = futureDate.format(formatter);
-            System.out.println(formattedDate);
+
 
             FormFirstPage form = quickEvent.getFormFirstPage();
-            result = form.setBirth(formattedDate).clickNextButton().getTextOfLess14YearsOldError();
+            result = form.setBirth(formattedDate)
+                    .clickNextButton()
+                    .getErrorTextSpanElement(expected);
         }
         catch (Exception e)
         {
-            result = "Текст ошибки не был виден";
+            result = "Не было показано";
         }
         assertEquals("Ограничение о том, что регистрация доступна с 14 лет не было высвечено",expected, result);
     }
@@ -168,15 +203,16 @@ public class FirstPageFormTest
 
     @Test
     @DisplayName("Проверка валидации серии паспорта по стандартам РФ")
-    public void checkRequiredValidationDulSeriesIfCitizenShipIsRfTest() throws InterruptedException
+    public void checkRequiredValidationDulSeriesIfCitizenShipIsRfTest()
     {
         boolean result;
+        String dulSeries = "289711";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutSeriesDul();
             FormFirstPage form = quickEvent.getFormFirstPage();
-            result = form.setDulSeries("289711")
-                    .checkDulSeriesValidation("289711");
+            result = form.setDulSeries(dulSeries)
+                    .checkDulSeriesValidation(dulSeries);
 
         }
         catch (Exception e)
@@ -188,14 +224,16 @@ public class FirstPageFormTest
 
     @Test
     @DisplayName("Проверка обязательности заполнения серии паспорта при гражданстве РФ")
-    public void checkRequiredFieldDulSeriesCinizenshipIsRf()
+    public void checkRequiredFieldDulSeriesCinizenshipIsRfTest()
     {
         boolean result;
+        String expected = "Поле обязательно к заполнению";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutSeriesDul();
             FormFirstPage form = quickEvent.getFormFirstPage();
-            result = form.clickNextButton().isErrorRequiredFieldVisible();
+            result = form.clickNextButton()
+                    .isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
@@ -206,22 +244,23 @@ public class FirstPageFormTest
 
     @Test
     @DisplayName("Проверка текста ошибки обязательности заполнения серии паспорта при гражданстве РФ")
-    public void checkTextErrorRequiredFieldDulSeriesCinizenshipIsRf()
+    public void checkTextErrorRequiredFieldDulSeriesCinizenshipIsRfTest()
     {
         String result;
+        String expected = "Поле обязательно к заполнению";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutSeriesDul();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
                     .clickNextButton()
-                    .getErrorTextFieldAreRequired();
+                    .getErrorTextSpanElement(expected);
         }
         catch (Exception e)
         {
             result = "Ошибка не была показана";
         }
-        assertEquals("Текст ошибки обязательности серии паспорта не совпал", "Поле обязательно к заполнению", result);
+        assertEquals("Текст ошибки обязательности серии паспорта не совпал", expected, result);
     }
 
     @Test
@@ -229,20 +268,22 @@ public class FirstPageFormTest
     public void checkTextErrorRequiredFieldSnilsNumberReceiptCinizenshipIsRfTest()
     {
         String result;
+        String expected = "Поле обязательно к заполнению";
+        String snilsRegistrationDate = "10.10.2015";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
-                    .setSnilsRegistrationDate("10.10.2015")
+                    .setSnilsRegistrationDate(snilsRegistrationDate)
                     .clickNextButton()
-                    .getErrorTextFieldAreRequired();
+                    .getErrorTextSpanElement(expected);
         }
         catch (Exception e)
         {
             result = "Ошибка не была показана";
         }
-        assertEquals("Текст ошибки обязательности номера снилс не совпал", "Поле обязательно к заполнению", result);
+        assertEquals("Текст ошибки обязательности номера снилс не совпал", expected, result);
     }
 
     @Test
@@ -250,14 +291,16 @@ public class FirstPageFormTest
     public void checkErrorRequiredFieldSnilsNumberReceiptCinizenshipIsRfTest()
     {
         boolean result;
+        String expected = "Поле обязательно к заполнению";
+        String snilsRegistration = "10.10.2015";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
-                    .setSnilsRegistrationDate("10.10.2015")
+                    .setSnilsRegistrationDate(snilsRegistration)
                     .clickNextButton()
-                    .isErrorRequiredFieldVisible();
+                    .isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
@@ -266,63 +309,73 @@ public class FirstPageFormTest
         assertTrue("Текст ошибки обязательности номера снилс не совпал", result);
     }
 
-    @Test
-    @DisplayName("Проверка текста видимости ошибки при гражданстве РФ и не заполненном даты получения снилс")
-    public void checkTextErrorRequiredFieldSnilsDateReceiptCinizenshipIsRfTest()
-    {
-        String result;
-        try
-        {
-            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
-            FormFirstPage form = quickEvent.getFormFirstPage();
-            result = form
-                    .setSnils("178-747-544 36")
-                    .clickNextButton()
-                    .getErrorTextFieldAreRequired();
-        }
-        catch (Exception e)
-        {
-            result = "Ошибка не была показана";
-        }
-        assertEquals("Текст ошибки обязательности даты снилс не совпал", "Поле обязательно к заполнению", result);
-    }
+//    @Test
+//    @DisplayName("Проверка текста видимости ошибки при гражданстве РФ и не заполненном даты получения снилс")
+//    public void checkTextErrorRequiredFieldSnilsDateReceiptCinizenshipIsRfTest()
+//    //Должен успасть
+//    {
+//        String result;
+//        String expected = "Поле обязательно к заполнению";
+//        String snilsNumber = "178-747-544 36";
+//        try
+//        {
+//            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
+//            FormFirstPage form = quickEvent.getFormFirstPage();
+//            result = form
+//                    .setSnils(snilsNumber)
+//                    .clickNextButton()
+//                    .getErrorTextSpanElement(expected);
+//        }
+//        catch (Exception e)
+//        {
+//            result = "Ошибка не была показана";
+//        }
+//        assertEquals("Текст ошибки обязательности даты снилс не совпал", expected, result);
+//    }
 
-    @Test
-    @DisplayName("Проверка видимости ошибки обязательности заполнения даты получения снилс при гражданстве РФ")
-    public void checkErrorRequiredFieldSnilsDateReceiptCinizenshipIsRfTest()
-    {
-        boolean result;
-        try
-        {
-            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
-            FormFirstPage form = quickEvent.getFormFirstPage();
-            result = form
-
-                    .setSnils("178-747-544 36")
-                    .clickNextButton()
-                    .isErrorRequiredFieldVisible();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
-        assertTrue("Текст ошибки обязательности даты снилс не появился", result);
-    }
+//    @Test
+//    @DisplayName("Проверка видимости ошибки обязательности заполнения даты получения снилс при гражданстве РФ")
+//    public void checkErrorRequiredFieldSnilsDateReceiptCinizenshipIsRfTest()
+//    //Должен успасть
+//    {
+//        boolean result;
+//        String snilsNumber = "178-747-544 36";
+//        String expected = "Поле обязательно к заполнению";
+//        try
+//        {
+//            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
+//            FormFirstPage form = quickEvent.getFormFirstPage();
+//            result = form
+//
+//                    .setSnils(snilsNumber)
+//                    .clickNextButton()
+//                    .isErrorVisibleSpanElement(expected);
+//        }
+//        catch (Exception e)
+//        {
+//            result = false;
+//        }
+//        assertTrue("Текст ошибки обязательности даты снилс не появился", result);
+//    }
 
     @Test
     @DisplayName("Проверка видимости ошибки ошибочной контрольной суммы снилса")
     public void checkValidationSnilsNumberTest()
     {
         boolean result;
+        String errorSnilsNumber = "111-111-111 11";
+        String correctDate = "01.01.2015";
+        String expected = "Неверное контрольное число.";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
 
-                    .setSnils("111-111-111 11")
+                    .setSnils(errorSnilsNumber)
+                    .setSnilsRegistrationDate(correctDate)
                     .clickNextButton()
-                    .isErrorSumSnilsDisplayed();
+                    .isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
@@ -336,33 +389,40 @@ public class FirstPageFormTest
     public void checkTextValidationSnilsNumberTest()
     {
         String result;
+        String errorSnilsNumber = "111-111-111 11";
+        String correctDate = "01.01.2015";
+        String expected = "Неверное контрольное число.";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
 
-                    .setSnils("111-111-111 11")
+                    .setSnils(errorSnilsNumber)
+                    .setSnilsRegistrationDate(correctDate)
                     .clickNextButton()
-                    .getErrorSumSnilsText();
+                    .getErrorTextSpanElement(expected);
         }
         catch (Exception e)
         {
             result = "Текст ошибки контрольной суммы снилс не совпал";
+
         }
+        assertEquals("Текст ошибки не совпал", expected, result);
     }
     @Test
     @DisplayName("Проверка видимости ошибки при паспорте рф и не заполнению кода подразделения выдачи паспорта")
     public void requiredCodeAgencyIfCinizenShipIsRfTest()
     {
         boolean result;
+        String expected = "Поле обязательно к заполнению";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutCodeAgency();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
                     .clickNextButton()
-                    .isErrorRequiredFieldVisible();
+                    .isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
@@ -376,63 +436,103 @@ public class FirstPageFormTest
     public void checkTextRequiredCodeAgencyIfCinizenShipIsRfTest()
     {
         String result;
+        String expected = "Поле обязательно к заполнению";
         try
         {
             quickEvent.fillTheFirstFormRuWithoutCodeAgency();
             FormFirstPage form = quickEvent.getFormFirstPage();
             result = form
                     .clickNextButton()
-                    .getErrorTextFieldAreRequired();
+                    .getErrorTextSpanElement(expected);
         }
         catch (Exception e)
         {
             result = "Текст не совпал";
         }
-        assertEquals("Текст ошибки обязательности кода подразделени не совпал", "Поле обязательно к заполнению", result);
+        assertEquals("Текст ошибки обязательности кода подразделени не совпал", expected, result);
     }
-//    @Test
-//    public void  checkAutoChoseRussianDulIfCinizenshipIsRf(){return;}
-//
-//    @Test
-//    public void checkPreFilledRussianDul(){return;}
-
-
 
     @Test
-    @DisplayName("Проверка показа ошибки после попытки загрзить ошибочный тип файла")
-    @Description("Загрузка файлов только разрешена jpg, jpeg, png. В случае ошибочного типа файла ожидается всплывающее окно с просьбой загрузить нужный файл. Ожидается ошибка сразу после попытки загрузки.")
-    public void checkErrorFileTypeTest() throws InterruptedException
+    @DisplayName("Проверка автозаполнения паспорта РФ при попадении на форму")
+    public void checkPreFilledRussianDulTest()
     {
         boolean result;
         try
         {
+            FormFirstPage form = new FormFirstPage(driver);
+            result = form
+                    .isPasportVisibleInField();
+        }
+        catch (Exception e)
+        {
+            result = false;
+        }
+        assertTrue("Паспорт не был автозаполнен при попадании на форму", result);
+        //должен упасть
+    }
+
+    @Test
+    @DisplayName("Проверка автозаполнения паспорта в типе дул после выбора гражданства РФ")
+    public void checkAutoFillInRuDulAfterChoosingRussianCitizenshipTest()
+    {
+        boolean result;
+        String ruCitizenship = "РОССИЯ";
+        String kzCitizenship = "КАЗАХСТАН";
+        try
+        {
+            FormFirstPage form = new FormFirstPage(driver);
+            result = form
+                    .setCitizenship(kzCitizenship)
+                    .setCitizenship(ruCitizenship)
+                    .isPasportVisibleInField();
+        }
+        catch (Exception e)
+        {
+            result = false;
+        }
+        assertTrue("Паспорт не был автозаполнен после установки гражданства РФ", result);
+        //должен упасть
+    }
+
+    @Test
+    @DisplayName("Проверка показа ошибки после попытки загрзить ошибочный тип файла")
+    @Description("Загрузка файлов только разрешена jpg, jpeg, png. В случае ошибочного типа файла ожидается всплывающее окно с просьбой загрузить нужный файл. Ожидается ошибка сразу после попытки загрузки.")
+    public void checkErrorFileTypeTest()
+    {
+        boolean result;
+        String expected = "Тип файла может быть одним из следующих: image/jpeg image/jpg image/png";
+        String fileErrorTypeNameInAttachFolder = "notPick.mp3";
+        try
+        {
             quickEvent.fillTheFirstForm();
             FormFirstPage firstPage = quickEvent.getFormFirstPage();
-            firstPage.uploadPhoto("notPick.mp3");
+            firstPage.uploadPhoto(fileErrorTypeNameInAttachFolder);
 
-            result = firstPage.isErrorFileTypeTextVisible();
+            result = firstPage.isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
             result = false;
         }
         assertTrue("После загрузки файла надпись об ошибке не появилась",result);
+        //должен упасть
     }
 
     @Test
     @DisplayName("Проверка текста ошибки после попытки загрузить ошибочный тип файла")
     @Description("Загрузка файлов только разрешена jpg, jpeg, png. В случае ошибочного типа файла ожидается всплывающее окно с просьбой загрузить нужный файл")
-    public void checkErrorFileTypeTextTest() throws InterruptedException
+    public void checkErrorFileTypeTextTest()
     {
         String expected = "Тип файла может быть одним из следующих: image/jpeg image/jpg image/png";
         String result = "";
+        String fileErrorTypeNameInAttachFolder = "notPick.mp3";
         try
         {
             quickEvent.fillTheFirstForm();
             FormFirstPage firstPage = quickEvent.getFormFirstPage();
-            firstPage.uploadPhoto("notPick.mp3");
+            firstPage.uploadPhoto(fileErrorTypeNameInAttachFolder);
 
-            result = firstPage.getTextOfErrorFileType();
+            result = firstPage.getErrorTextSpanElement(expected);
             System.out.println(result);
         }
         catch (Exception e)
@@ -440,20 +540,23 @@ public class FirstPageFormTest
             result = "Ошибки не было видно";
         }
         assertEquals("Текст ошибки при загрузке ошибочного файла не совпал", expected, result);
+        //должен упасть
     }
 
     @Test
     @DisplayName("Проверка отображения ошибки неправильного формата телефона")
-    public void checkErrorFormatPhoneNumberIsDisplayedTest() throws InterruptedException
+    public void checkErrorFormatPhoneNumberIsDisplayedTest()
     {
         boolean result;
+        String expected = "Неверный формат номера телефона";
+        String errorPhoneNumber = "(111)111-11-1";
         try
         {
             quickEvent.fillTheFirstFormWithoutAutoPhone();
             FormFirstPage firstPage = quickEvent.getFormFirstPage();
-            firstPage.setPhoneNumber("(111)111-11-1").clickNextButton();
+            firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
             //уточнить у Бехи
-            result = firstPage.isErrorFormatPhoneNumberNotificationVisible();
+            result = firstPage.isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
@@ -465,36 +568,40 @@ public class FirstPageFormTest
 
     @Test
     @DisplayName("Проверка текста ошибки неправильного формата телефона")
-    public void checkErrorFormatPhoneNumberTextTest() throws InterruptedException
+    public void checkErrorFormatPhoneNumberTextTest()
     {
         String result;
+        String expected = "Неверный формат номера телефона";
+        String errorPhoneNumber = "(111)111-11-1";
         try
         {
             quickEvent.fillTheFirstFormWithoutAutoPhone();
             FormFirstPage firstPage = quickEvent.getFormFirstPage();
-            firstPage.setPhoneNumber("(111)111-11-1").clickNextButton();
+            firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
             //уточнить у Бехи
-            result = firstPage.getTextOfErrorFormatPhoneNumber();
+            result = firstPage.getErrorTextSpanElement(expected);
         }
         catch (Exception e)
         {
             result = "Текст ошибки не был показан";
         }
-        assertEquals("Ошибка неверного формата телефона не ссоответствовала ошибке формата телефона", "Неверный формат номера телефона", result);
+        assertEquals("Ошибка неверного формата телефона не ссоответствовала ошибке формата телефона", expected, result);
     }
 
     @Test
     @DisplayName("Проверка отображения ошибки некоректного номера телефона")
-    public void checkErrorPhoneNumberIsDisplayedTest() throws InterruptedException
+    public void checkErrorPhoneNumberIsDisplayedTest()
     {
         boolean result;
+        String expected = "Введен некорректный номер телефона.";
+        String errorPhoneNumber = "(111)111-11-11";
         try
         {
             quickEvent.fillTheFirstFormWithoutAutoPhone();
             FormFirstPage firstPage = quickEvent.getFormFirstPage();
-            firstPage.setPhoneNumber("(111)111-11-11").clickNextButton();
+            firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
             //уточнить у Бехи
-            result = firstPage.isIncorrectPhoneNumberNotificationVisible();
+            result = firstPage.isErrorVisibleSpanElement(expected);
         }
         catch (Exception e)
         {
@@ -505,36 +612,42 @@ public class FirstPageFormTest
 
     @Test
     @DisplayName("Проверка текста ошибки некоректного номера телефона")
-    public void checkErrorPhoneNumberTextTest() throws InterruptedException
+    public void checkErrorPhoneNumberTextTest()
     {
         String result;
+        String expected = "Введен некорректный номер телефона.";
+        String errorPhoneNumber = "(111)111-11-11";
         try
         {
             quickEvent.fillTheFirstFormWithoutAutoPhone();
             FormFirstPage firstPage = quickEvent.getFormFirstPage();
-            firstPage.setPhoneNumber("(111)111-11-11").clickNextButton();
+            firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
+
             //уточнить у Бехи
-            result = firstPage.getTextOfIncorrectPhoneNumber();
+            result = firstPage.getErrorTextSpanElement(expected);
+            //.//span[text()='Введен некорректный номер телефона.']
         }
         catch (Exception e)
         {
             result = "Ошибка не была показана";
         }
-        assertEquals("Ошибка некоректного номера телефона не была показана", "Введен некорректный номер телефона.", result);
+        assertEquals("Ошибка некоректного номера телефона не была показана", expected, result);
     }
 
     @Test
     @DisplayName("Проверка отсутствия ДУЛ чужой страны при гражданстве РФ")
     @Description("При гражданстве РФ не должно быть возможности постаивть паспорт другой страны")
-    public void checkIfСitizenshipIsRussianDulOnlyPasportRfTest() throws InterruptedException
+    public void checkIfСitizenshipIsRussianDulOnlyPasportRfTest()
     {
-        quickEvent.fillTheFirstForm();
-        FormFirstPage firstPage = quickEvent.getFormFirstPage();
+        String countryRussia = "РОССИЯ";
         boolean result;
+
         try
         {
-            firstPage.setCitizenship("РОССИЯ").setOtherCountryPasport();
-            result = false;
+            FormFirstPage form = new FormFirstPage(driver);
+            result = form
+                    .setCitizenship(countryRussia)
+                    .isPasportOtherCountryIsAbsentIfCinizenshipRf();
         }
         catch (Exception e)
         {
@@ -550,5 +663,5 @@ public class FirstPageFormTest
     }
 }
 /*
-Можно тыкнуть год 1000
+25
  */

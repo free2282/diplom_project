@@ -44,8 +44,8 @@ public class FormFirstPage extends BasePage
     private final By educationList = By.xpath("//*[@id='react-select-6-listbox']");
 
     private final By dulDropDown = By.xpath("//*[@id='root']/form/section[2]/div[1]/div[2]/div");
-    private final By pasportRf = By.xpath(".//div[text()='ПАСПОРТ РФ']");
-    private final By pasportOtherCountry = By.xpath(".//div[text()='ПАСПОРТ ДРУГОГО ГОСУДАРСТВА']");
+    private final By pasportRfInDropDown = By.xpath("//*[@id='react-select-7-option-0' and text()='ПАСПОРТ РФ' ]");
+    private final By pasportOtherCountryInDropDown = By.xpath(".//div[text()='ПАСПОРТ ДРУГОГО ГОСУДАРСТВА']");
     private final By dulNumber = By.xpath(".//div[@class='p-0 rounded-0 flex flex-col max-sm:col-span-2 gap-1']/input[@placeholder='000000']");
     private final By dulSeries = By.xpath(".//input[@placeholder='00 00']");
     private final By governmentAgency = By.xpath("//*[@id='root']/form/section[2]/div[4]/input");
@@ -77,6 +77,7 @@ public class FormFirstPage extends BasePage
     private final By errorAgeLess14 = By.xpath(".//span[text()='Регистрация возможна только для лиц от 14 лет. Исправьте дату своего рождения.']");
     private final By errorThisFieldAreRequired = By.xpath(".//span[text()='Поле обязательно к заполнению']");
     private final By errorSumOfSnilsnumber = By.xpath(".//span[text()='Неверное контрольное число.']");
+    private final By ruPfasportInField = By.xpath("//*[@id='root']/form/section[2]/div[1]/div[2]/div/div[1]/div[text()='ПАСПОРТ РФ']");
     public FormFirstPage(WebDriver driver)
     {
         super(driver);
@@ -87,9 +88,10 @@ public class FormFirstPage extends BasePage
     public FormFirstPage uploadPhoto(String photoName) throws InterruptedException
     {
 
-        findElementOnPage(photoUploadPlace).sendKeys(
+        findElementOnPage(photoUploadPlace).sendKeys
+                (
                 new File("./attach/"+photoName).getAbsolutePath()
-        );
+                );
         waitAfterEvent(1);
         return this;
     }
@@ -267,7 +269,7 @@ public class FormFirstPage extends BasePage
     public FormFirstPage setRussianPasport() throws InterruptedException
     {
         clickElementOnPage(dulDropDown);
-        clickElementOnPage(pasportRf);
+        clickElementOnPage(pasportRfInDropDown);
         waitAfterEvent(1);
         return this;
     }
@@ -276,10 +278,20 @@ public class FormFirstPage extends BasePage
     public FormFirstPage setOtherCountryPasport() throws InterruptedException
     {
         clickElementOnPage(dulDropDown);
-        clickElementOnPage(pasportOtherCountry);
+        clickElementOnPage(pasportOtherCountryInDropDown);
         waitAfterEvent(1);
         return this;
     }
+
+    @Step("Проверка отсутствия паспорта другой страны при гражданстве рф")
+    public boolean isPasportOtherCountryIsAbsentIfCinizenshipRf()
+    {
+        clickElementOnPage(dulDropDown);
+        return elementIsNotDisplayed(pasportOtherCountryInDropDown);
+
+    }
+
+
 
     @Step("Установка значения серии паспорта")
     public FormFirstPage setDulSeries(String series) throws InterruptedException
@@ -291,11 +303,8 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
-    @Step("Получить значние в ячейке серия паспортиа")
-    public String getDulSeriesValue(String dulSeries)
-    {
-        return findElementOnPage(By.xpath("//*[@id='root']/form/section[2]/div[2]/input[@value='" + dulSeries+"']")).getText();
-    }
+
+
     @Step("Проверка правильности валидации серии паспорта при гражданстве РФ")
     public boolean checkDulSeriesValidation(String dulSeries) //123456
     {
@@ -474,23 +483,6 @@ public class FormFirstPage extends BasePage
         return this;
     }
 
-    @Step("Проверка видимости ошибки при загрузке файла не того разрешения в место фотографии")
-    public boolean isErrorFileTypeTextVisible() throws InterruptedException {
-        boolean result = findElementOnPage(errorFileType).isDisplayed();
-
-        String resultToString = result +"";
-        Allure.addAttachment("Значение", resultToString);
-        waitAfterEvent(1);
-        return result;
-    }
-
-    @Step("Получение текста ошибки при загрузке файла не того разрешения")
-    public String getTextOfErrorFileType() throws InterruptedException {
-        String result =  getTextOfElement(errorFileType);
-        Allure.addAttachment("Значение", result);
-        waitAfterEvent(1);
-        return result;
-    }
 
     @Step("Нажатие на кнопку далее")
     public FormFirstPage clickNextButton() throws InterruptedException {
@@ -506,76 +498,27 @@ public class FormFirstPage extends BasePage
         return findElementOnPage(nextPageAsssureance).isDisplayed();
     }
 
-    @Step("Проверка видимости ошибки при ошибочном формате номера")
-    public Boolean isErrorFormatPhoneNumberNotificationVisible() throws InterruptedException {
-        boolean result = findElementOnPage(errorFormatPhoneNumber).isDisplayed();
-        String resultToString = result +"";
-        Allure.addAttachment("Значение", resultToString);
-        waitAfterEvent(1);
-        return result;
-    }
 
-    @Step("Проверка значения ошибки ошибочный формате номера")
-    public String getTextOfErrorFormatPhoneNumber() throws InterruptedException {
-        String result =  getTextOfElement(errorFormatPhoneNumber);
-        Allure.addAttachment("Значение", result);
-        waitAfterEvent(1);
-        return result;
-    }
 
-    @Step("Проверка видимости ошибки при ошибочном коде страны")
-    public Boolean isIncorrectPhoneNumberNotificationVisible() throws InterruptedException
+    @Step("Проверка видимости ошибки")
+    public boolean isErrorVisibleSpanElement(String error)
     {
-        boolean result = findElementOnPage(incorrectPhoneNumber).isDisplayed();
-        String resultToString = result +"";
-        Allure.addAttachment("Значение", resultToString);
-        waitAfterEvent(1);
+        System.out.println(".//span[text()='" + error +"']");
+        return findElementOnPage(By.xpath(".//span[text()='" + error +"']")).isDisplayed();
 
-        return result;
     }
 
-    @Step("Проверка значения ошибки при ошибочном коде страны")
-    public String getTextOfIncorrectPhoneNumber() throws InterruptedException
+    @Step("Получение текста ошибки")
+    public String getErrorTextSpanElement(String error)
     {
-        String result =  getTextOfElement(incorrectPhoneNumber);
-        Allure.addAttachment("Значение", result);
-        waitAfterEvent(1);
-        return result;
+        System.out.println(".//span[text()='" + error +"']");
+        return findElementOnPage(By.xpath(".//span[text()='" + error +"']")).getText();
     }
 
-    @Step("Проверка видимости ошибки о возрасте, младшем 14 лет")
-    public boolean isErrorLess14YearsOldIsDisplayed()
+    @Step("Проверка заполнения поля паспортом РФ")
+    public boolean isPasportVisibleInField()
     {
-        return findElementOnPage(errorAgeLess14).isDisplayed();
+        return elementIsDisplayed(ruPfasportInField);
     }
 
-    @Step("Проверка значения ошибки при возрасте, младшем 14 лет")
-    public String getTextOfLess14YearsOldError()
-    {
-        return findElementOnPage(errorAgeLess14).getText();
-    }
-
-    @Step("Проверка видимости ошибки обязательности заполнения")
-    public boolean isErrorRequiredFieldVisible()
-    {
-        return findElementOnPage(errorThisFieldAreRequired).isDisplayed();
-    }
-
-    @Step("Проверка текста ошибки обязательности заполнения")
-    public String getErrorTextFieldAreRequired()
-    {
-        return findElementOnPage(errorThisFieldAreRequired).getText();
-    }
-
-    @Step("Проверка ошибки контрольного числа снилс")
-    public boolean isErrorSumSnilsDisplayed()
-    {
-        return findElementOnPage(errorSumOfSnilsnumber).isDisplayed();
-    }
-
-    @Step("Проверка ошибки контрольного числа снилс")
-    public String getErrorSumSnilsText()
-    {
-        return findElementOnPage(errorSumOfSnilsnumber).getText();
-    }
 }

@@ -29,7 +29,7 @@ public class QuickEvent
     private FormFirstPage formFirstPage;
 
 
-    public void logIn(Browsers browsers) throws InterruptedException
+    public QuickEvent logIn(Browsers browsers) throws InterruptedException
     {
         authApi = new AuthApi();
         webDrivermanagment = new WebDrivermanagment();
@@ -49,9 +49,10 @@ public class QuickEvent
         mainPage.waitAfterEvent(10).setTokenToField(token).waitAfterEvent(10)
                 .clickLogInButton().waitAfterEvent(10)
                 .isExitButtonDisplayed();
+        return this;
     }
 
-    public void fillTheFirstForm() throws InterruptedException
+    public QuickEvent fillTheFirstForm() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -88,9 +89,10 @@ public class QuickEvent
                 .setPlaceOfWork("Завод")
                 .setWorkingPosition("Геодезист")
                 .setPeriodOfWork("с 2024");
+        return this;
     }
 
-    public void fillTheFirstFormRuWithoutSeriesDul() throws InterruptedException
+    public QuickEvent fillTheFirstFormRuWithoutSeriesDul() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -126,9 +128,10 @@ public class QuickEvent
                 .setPlaceOfWork("Завод")
                 .setWorkingPosition("Геодезист")
                 .setPeriodOfWork("с 2024");
+        return this;
     }
 
-    public void fillTheFirstFormRuWithoutNumberSnilsAndDate() throws InterruptedException
+    public QuickEvent fillTheFirstFormRuWithoutNumberSnilsAndDate() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -163,9 +166,10 @@ public class QuickEvent
                 .setPlaceOfWork("Завод")
                 .setWorkingPosition("Геодезист")
                 .setPeriodOfWork("с 2024");
+        return this;
     }
 
-    public void fillTheFirstFormRuWithoutCodeAgency() throws InterruptedException
+    public QuickEvent fillTheFirstFormRuWithoutCodeAgency() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -201,9 +205,10 @@ public class QuickEvent
                 .setPlaceOfWork("Завод")
                 .setWorkingPosition("Геодезист")
                 .setPeriodOfWork("с 2024");
+        return this;
     }
 
-    public void fillTheFirstFormWithoutAutoPhone() throws InterruptedException
+    public QuickEvent fillTheFirstFormWithoutAutoPhone() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -239,9 +244,10 @@ public class QuickEvent
                 .setPlaceOfWork("Завод")
                 .setWorkingPosition("Геодезист")
                 .setPeriodOfWork("с 2024");
+        return this;
     }
 
-    public void fillTheFirstFormWithoutAutoBirthDate() throws InterruptedException
+    public QuickEvent fillTheFirstFormWithoutAutoBirthDate() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -277,13 +283,14 @@ public class QuickEvent
                 .setPlaceOfWork("Завод")
                 .setWorkingPosition("Геодезист")
                 .setPeriodOfWork("с 2024");
+        return this;
     }
 
-    public void fillMinFormForeignPasport() throws InterruptedException
+    public QuickEvent fillMinFormForeignPasport() throws InterruptedException
     {
-        FormFirstPage form = new FormFirstPage(driver);
+        formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
-        form
+        formFirstPage
                 .setSurname(consumerModel.getName())
                 .setName(consumerModel.getName())
                 .chooseMaleSex()
@@ -309,8 +316,8 @@ public class QuickEvent
                 .setPlaceOfWork("ТК НТК 'Трубопровод'")
                 .setWorkingPosition("Геодезитст")
                 .setDisabilityNo()
-                .setEducationProgram(2)
-                .clickNextButton().isTextSecondPageVisible();
+                .setEducationProgram(2);
+        return this;
     }
     public FormFirstPage getFormFirstPage()
     {

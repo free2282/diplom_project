@@ -14,8 +14,10 @@ import ru.miigaik.cfg.ConfigurationProject;
 import org.junit.Assert;
 import javax.swing.*;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertTrue;
@@ -60,16 +62,6 @@ public abstract class BasePage
         findElementOnPage(xpath).sendKeys(data);
     }
 
-    protected void setDataToInputElement(By xpath, String data, int timeWaiting) throws InterruptedException
-    {
-        TimeUnit.SECONDS.sleep(timeWaiting);
-        findElementOnPage(xpath).sendKeys(data);
-    }
-
-    public String  getTextOfElement(By xpath)
-    {
-        return findElementOnPage(xpath).getText();
-    }
 
     protected void isElementClickAble(By xpath)
     {
@@ -131,6 +123,27 @@ public abstract class BasePage
         }
     }
 
+    protected void switchToWindow()
+    {
+        Set<String> windowHandles = driver.getWindowHandles();
+        for (String windowHandle : windowHandles)
+        {
+            driver.switchTo().window(windowHandle);
+        }
+    }
+
+    public boolean isFileDownloaded(String fileName)
+    {
+        File file = new File("C:\\Users\\maine\\Downloads\\" + fileName);
+        if (file.exists())
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     public BasePage waitAfterEvent(int timeWaiting) throws InterruptedException
     {
