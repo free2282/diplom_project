@@ -45,9 +45,8 @@ public class SecondPageFormTest
     @Before
     public void setUp() throws InterruptedException
     {
-        quickEvent = new QuickEvent();
-        quickEvent.logIn(browsers);
-
+        quickEvent = new QuickEvent(browsers);
+        quickEvent.logIn();
     }
 
     @Test
@@ -524,7 +523,7 @@ public class SecondPageFormTest
     }
 
     @Test
-    @DisplayName("Проверка уведомления об ошибке на загрузке СНИЛС с граждантсвом РФ")
+    @DisplayName("Проверка уведомления об ошибке не загрузке СНИЛС с граждантсвом РФ")
     public void checkErrorSendingWithoutSnilsTest() throws InterruptedException
     {
         boolean actual;
@@ -551,7 +550,7 @@ public class SecondPageFormTest
 
         Allure.addAttachment("Видно ли уведомление об ошибке не загрузки обязательноого документа СНИЛС при гражданстве РФ", actual+"");
         assertTrue("Ошибка о не загрузке СНИЛС не была показана", actual);
-            //assertFalse("Ошибка о не загрузке паспорта не была показана",actual);
+
         }
 
     @Test
@@ -585,10 +584,12 @@ public class SecondPageFormTest
         assertFalse("Форма была отправлена на модерацию", actual);
     }
 
+
+
     @After
     public void tearDown()
     {
-        quickEvent.getDriver().quit();
+//        quickEvent.getDriver().quit();
     }
 
 

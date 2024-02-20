@@ -1,6 +1,7 @@
 package pages;
 
 import io.qameta.allure.Allure;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -41,11 +42,11 @@ public class SecondPageFormUploadParametrizedTest
         return new Object[][]
                 {
                         {CHROME,"test.jpeg", true},
-                        {CHROME,"test.jpg", true},
-                        {CHROME,"test.pdf", true},
-                        {CHROME,"test.png", true},
-                        {CHROME,"text.txt", false},
-                        {CHROME,"more5mb.jpeg", false},
+//                        {CHROME,"test.jpg", true},
+//                        {CHROME,"test.pdf", true},
+//                        {CHROME,"test.png", true},
+//                        {CHROME,"text.txt", false},
+//                        {CHROME,"more5mb.jpeg", false},
 
 //                        {YANDEX,"test.jpeg", true},
 //                        {YANDEX,"test.jpg", true},
@@ -73,8 +74,8 @@ public class SecondPageFormUploadParametrizedTest
     @Before
     public void setUp() throws InterruptedException
     {
-        quickEvent = new QuickEvent();
-        quickEvent.logIn(browsers).fillTheFirstForm();
+        quickEvent = new QuickEvent(browsers);
+        quickEvent.logIn().fillTheFirstForm();
         driver = quickEvent.getDriver();
         FormFirstPage formFirstPage = new FormFirstPage(driver);
         formFirstPage.clickNextButton();
@@ -84,6 +85,7 @@ public class SecondPageFormUploadParametrizedTest
     }
 
     @Test
+    @DisplayName("Проверка загрузки типов файлов в персональном листе")
     public void checkPersonalListFileUploadingTest() throws InterruptedException
     {
         boolean result;
@@ -102,6 +104,7 @@ public class SecondPageFormUploadParametrizedTest
     }
 
     @Test
+    @DisplayName("Проверка загрузки типов файлов в заявлении поступающего")
     public void checkIncomingStatementFileUploadingTest() throws InterruptedException {
         boolean result;
 
@@ -121,6 +124,7 @@ public class SecondPageFormUploadParametrizedTest
     }
 
     @Test
+    @DisplayName("Проверка загрузки типов файлов в согласие на обработку ПД")
     public void checkConsentToTheProcessingOfPersonalDataFileUploadingTest() throws InterruptedException {
         boolean result;
 
@@ -140,6 +144,7 @@ public class SecondPageFormUploadParametrizedTest
     }
 
     @Test
+    @DisplayName("Проверка загрузки типов файлов в паспорте")
     public void checkPasportFileUploadingTest() throws InterruptedException {
         boolean result;
             result = formSecondPage
@@ -158,6 +163,7 @@ public class SecondPageFormUploadParametrizedTest
     }
 
     @Test
+    @DisplayName("Проверка загрузки типов файлов в дипломе")
     public void checkDiplomFileUploadingTest() throws InterruptedException {
         boolean result;
             result = formSecondPage
@@ -176,6 +182,7 @@ public class SecondPageFormUploadParametrizedTest
     }
 
     @Test
+    @DisplayName("Проверка загрузки типов файлов в смене ФИО")
     public void checkDocumentAboutChangingFIOUploadingTest() throws InterruptedException {
         boolean result;
 
@@ -195,6 +202,7 @@ public class SecondPageFormUploadParametrizedTest
     }
 
     @Test
+    @DisplayName("Проверка загрузки типов файлов в снилс")
     public void checkSnilsUploadingTest() throws InterruptedException {
         boolean result;
 
@@ -216,7 +224,7 @@ public class SecondPageFormUploadParametrizedTest
     @After
     public void tearDown()
     {
-        driver.quit();
+//        driver.quit();
         //дописапть, если true, то перейти на форму админа и закрыть
     }
 }

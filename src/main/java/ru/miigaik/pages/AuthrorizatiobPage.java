@@ -7,7 +7,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.util.concurrent.TimeUnit;
 
-public class MainPage extends BasePage
+public class AuthrorizatiobPage extends BasePage
 {
     private static final By emailInputField = By.xpath(".//input[@name='email']");
     private static final By getTokenButton = By.xpath(".//button[text()='Получить код']");
@@ -21,13 +21,13 @@ public class MainPage extends BasePage
     private static final By errorLengthTokenNotification = By.xpath(".//span[text()='Неверная длина кода']");
     private static final By invalidTokenNotification = By.xpath(".//div[text()='Получен неверный токен.']");
 
-    public MainPage(WebDriver driver)
+    public AuthrorizatiobPage(WebDriver driver)
     {
         super(driver);
     }
 
     @Step("Установка значения в поле 'Электронная почта'")
-    public MainPage setEmailToField(String email)
+    public AuthrorizatiobPage setEmailToField(String email)
     {
         Allure.addAttachment("В поле для почты была положена почта с адрессом", email+"");
         setDataToInputElement(emailInputField, email);
@@ -35,21 +35,21 @@ public class MainPage extends BasePage
     }
 
     @Step("Нажатие на кнопку 'Получить код'")
-    public MainPage clickGetTokenButton()
+    public AuthrorizatiobPage clickGetTokenButton()
     {
         clickElementOnPage(getTokenButton);
         return this;
     }
 
     @Step("Установка значения в поле 'Одноразовый код'")
-    public MainPage setTokenToField(String token)
+    public AuthrorizatiobPage setTokenToField(String token)
     {
         setDataToInputElement(tokenInputField, token);
         return this;
     }
 
     @Step("Клик на кнопку 'Войти'")
-    public MainPage clickLogInButton()
+    public AuthrorizatiobPage clickLogInButton()
     {
         clickElementOnPage(logInButton);
         return this;
@@ -75,7 +75,7 @@ public class MainPage extends BasePage
     }
 
     @Step("Нажатие на кнопку 'Назад'")
-    public MainPage clickBackButton()
+    public AuthrorizatiobPage clickBackButton()
     {
         clickElementOnPage(backButton);
         return this;
@@ -120,7 +120,7 @@ public class MainPage extends BasePage
 
 
     @Override
-    public MainPage waitAfterEvent(int timeWaiting) throws InterruptedException
+    public AuthrorizatiobPage waitAfterEvent(int timeWaiting) throws InterruptedException
     {
         TimeUnit.SECONDS.sleep(timeWaiting);
         return this;

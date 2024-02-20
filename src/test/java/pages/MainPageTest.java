@@ -15,7 +15,7 @@ import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
 import ru.miigaik.browser.Browsers;
 import ru.miigaik.browser.WebDrivermanagment;
-import ru.miigaik.pages.MainPage;
+import ru.miigaik.pages.AuthrorizatiobPage;
 
 import static org.junit.Assert.assertTrue;
 import static ru.miigaik.browser.Browsers.*;
@@ -25,7 +25,7 @@ import static ru.miigaik.action.Generator.setEmailToAuthRequest2Var;
 @RunWith(Parameterized.class)
 public class MainPageTest
 {
-    private MainPage mainPage;
+    private AuthrorizatiobPage authrorizatiobPage;
     private AuthApi authApi;
     private EmailRequestModel emailRequestModel;
     private EmailResponseModel emailResponseModel;
@@ -62,7 +62,7 @@ public class MainPageTest
         driver = webDrivermanagment.setDriver(browsers);
         driver.get(MAIN_PAGE);
 
-        mainPage = new MainPage(driver);
+        authrorizatiobPage = new MainPage(driver);
         emailRequestModel = setEmailToAuthRequest2Var();
         email = emailRequestModel.getEmail();
     }
@@ -71,23 +71,17 @@ public class MainPageTest
     @Description("Проверка базовой аунтификации, ожидание оказаться на странцие заполнения данных, будет доступна кнопка выйти из аккаунта")
     public void checkBaseAuthAfterClickingLogInButtonTest() throws InterruptedException
     {
-        try
-        {
+
             Allure.addAttachment("Логин в систему с почтой", email + "");
-            mainPage.setEmailToField(email).waitAfterEvent(5)
+            authrorizatiobPage.setEmailToField(email).waitAfterEvent(5)
                     .clickGetTokenButton().waitAfterEvent(5);
             Response response = authApi.authEmail(emailRequestModel);
             emailResponseModel = response.body().as(EmailResponseModel.class);
             token = emailResponseModel.getDetail();
 
-            result = mainPage.waitAfterEvent(10).setTokenToField(token).waitAfterEvent(10)
+            result = authrorizatiobPage.waitAfterEvent(10).setTokenToField(token).waitAfterEvent(10)
                     .clickLogInButton().waitAfterEvent(10)
                     .isExitButtonDisplayed();
-        }
-        catch (Exception e)
-        {
-            result=false;
-        }
         assertTrue("Кнопка выйти не была видна, процесс входа не был произведен", result);
     }
 
@@ -97,17 +91,11 @@ public class MainPageTest
     public void checkBackButtonExpectGetTokenButtonVisTest()
     {
 
-        try
-        {
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .clickBackButton()
                     .isGetTokenDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue("Кнопка назад не сработала, кнопка получить код не была видна", result);
     }
 
@@ -115,17 +103,12 @@ public class MainPageTest
     @DisplayName("Проверка действия кнопки назад с ожиданием отсутствия кнопки 'Войти'")
     public void checkBackButtonExpectLogInButtonIsNotVisTest()
     {
-        try
-        {
-            result = mainPage.setEmailToField(email)
+
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .isLogInIsNotDisplay();
-            mainPage.clickBackButton();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+            authrorizatiobPage.clickBackButton();
+
         assertTrue("Кнопка назад не сработала, кнопка войти была видна", result );
     }
 
@@ -134,16 +117,11 @@ public class MainPageTest
     @DisplayName("Проверка всплывающего уведомления после успешного запроса отправки на почту токена авторизации")
     public void checkSuccessfulEmailInputTest()
     {
-        try
-        {
-            result = mainPage.setEmailToField(email)
+
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .isSuccessfulInputEmailNotificationVisible();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
 
         assertTrue("Уведомление об успешном ввооде email не было показано", result);
     }
@@ -152,17 +130,12 @@ public class MainPageTest
     @DisplayName("Проверка не перехода на следюущий этап после ошибочного ввода email и нажатия войти")
     public void checkGetCodeButtonAfterFailureEmailInputTest()
     {
-        try
-        {
+
             email = "error";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .isGetTokenDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
 
         assertTrue("Кнопку 'Получить код' не было видно, произошел переход на след.шаг", result);
     }
@@ -171,17 +144,12 @@ public class MainPageTest
     @DisplayName("Проверка уведомления об ошибке при ошибке написания email")
     public void checkNotificationInvalidEmailTest()
     {
-        try
-        {
+
             email = "error";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .isEmailIsNotValidNotificationDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue( "Уведомление об не валидном вводе email не было показано",result);
     }
 
@@ -189,17 +157,12 @@ public class MainPageTest
     @DisplayName("Проверка текста с просьбой ввести email после попытки отправки пустого поля email")
     public void checkNullNotificationEmailTest()
     {
-        try
-        {
+
             email = "";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .isEmailNullNotificationDisplayed();
-        }
-        catch (Exception e)
-        {
-               result = false;
-        }
+
         assertTrue("Уведомление о пустом email не было получено", result);
     }
 
@@ -207,17 +170,12 @@ public class MainPageTest
     @DisplayName("Проверка не перехода на следюущий этап после пустого значения в email и нажатия войти")
     public void checkGetCodeButtonAfterNullEmailInputTest()
     {
-        try
-        {
+
             email = "";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .isGetTokenDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue("Кнопку 'Получить код' не было видно, произошел переход на след.шаг", result);
     }
 
@@ -225,20 +183,16 @@ public class MainPageTest
     @DisplayName("Проверка уведомления о невалидной длине токена, большей 6 цифр, авторизации")
     public void checkTokenNotValidLengthMore6Test() throws InterruptedException
     {
-        try
-        {
+
+
             token = "1234567";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .waitAfterEvent(5)
                     .isTokenErrorLengthDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue("Текст о невалидной длине токена авторизации не был показан", result);
     }
 
@@ -246,20 +200,15 @@ public class MainPageTest
     @DisplayName("Проверка уведомления о невалидной длине токена, меньшей 6 цифр, авторизации")
     public void checkTokenNotValidLengthLess6Test() throws InterruptedException
     {
-        try
-        {
+
             token = "12345";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .waitAfterEvent(5)
                     .isTokenErrorLengthDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue( "Текст о невалидной длине токена авторизации не был показан", result);
     }
 
@@ -267,20 +216,15 @@ public class MainPageTest
     @DisplayName("Проверка уведомления о передаче пустой строки для токена авторизации")
     public void checkNotValidNullTest() throws InterruptedException
     {
-        try
-        {
+
             token = "";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .waitAfterEvent(5)
                     .isTokenErrorLengthDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue("Текст о невалидной длине токена авторизации не был показан", result);
     }
 
@@ -288,19 +232,14 @@ public class MainPageTest
     @DisplayName("Проверка уведомления об ошибочном токене авторизации")
     public void checkInvalidTokenTest()
     {
-        try
-        {
+
             token = "12345q";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .isInvalidTokenNotificationDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue("Уведомление о неуспешном вводе токена не было показано", result);
     }
 
@@ -308,19 +247,14 @@ public class MainPageTest
     @DisplayName("Проверка видимости кнопки войти после ввода ошибочного 5ти значения токена и не перехода на следюущий этап")
     public void checkVisibilityLoginButtonAfterInvalidShortTokenTest()
     {
-        try
-        {
+
             token = "12345";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .isLogInButtonDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
 
         assertTrue("Кнопка 'Войти' не была видна, был переход на следующий шаг", result);
     }
@@ -329,19 +263,14 @@ public class MainPageTest
     @DisplayName("Проверка видимости кнопки войти после ввода ошибочного 7ти значения токена и не перехода на следюущий этап")
     public void checkVisibilityLoginButtonAfterInvalidLengthTokenTest()
     {
-        try
-        {
+
             token = "1234567";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .isLogInButtonDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
 
         assertTrue("Кнопка 'Войти' не была видна, был переход на следующий шаг", result);
     }
@@ -350,19 +279,14 @@ public class MainPageTest
     @DisplayName("Проверка видимости кнопки войти после нажатия кнопки 'Войти' с пустым токеном авторизации не перехода на следюущий этап")
     public void checkVisibilityLoginButtonAfterNullTokenTest()
     {
-        try
-        {
+
             token = "";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .isLogInButtonDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
         assertTrue("Кнопка 'Войти' не была видна, был переход на следующий шаг", result);
     }
 
@@ -370,19 +294,14 @@ public class MainPageTest
     @DisplayName("Проверка видимости кнопки войти после ввода ошибочного значения токена правильной длины и не перехода на следюущий этап")
     public void checkVisibilityLoginButtonAfterInvalidTokenTest()
     {
-        try
-        {
+
             token = "";
-            result = mainPage.setEmailToField(email)
+            result = authrorizatiobPage.setEmailToField(email)
                     .clickGetTokenButton()
                     .setTokenToField(token)
                     .clickLogInButton()
                     .isLogInButtonDisplayed();
-        }
-        catch (Exception e)
-        {
-            result = false;
-        }
+
 
         assertTrue("Кнопка 'Войти' не была видна, был переход на следующий шаг", result);
     }
@@ -390,7 +309,7 @@ public class MainPageTest
     @After
     public void setDown() throws InterruptedException
     {
-        mainPage.waitAfterEvent(1);
+        authrorizatiobPage.waitAfterEvent(1);
         driver.quit();
     }
 }

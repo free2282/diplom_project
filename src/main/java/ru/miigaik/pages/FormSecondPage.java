@@ -59,7 +59,6 @@ public class FormSecondPage extends BasePage
                 (
                         new File("./attach/filesForTest/"+fileName).getAbsolutePath()
                 );
-        waitAfterEvent(1);
         return this;
     }
 
@@ -70,7 +69,6 @@ public class FormSecondPage extends BasePage
                 (
                         new File("./attach/filesForTest/"+fileName).getAbsolutePath()
                 );
-        waitAfterEvent(1);
         return this;
     }
 
@@ -81,7 +79,6 @@ public class FormSecondPage extends BasePage
                 (
                         new File("./attach/filesForTest/"+fileName).getAbsolutePath()
                 );
-        waitAfterEvent(1);
         return this;
     }
 
@@ -92,7 +89,6 @@ public class FormSecondPage extends BasePage
                 (
                         new File("./attach/filesForTest/"+fileName).getAbsolutePath()
                 );
-        waitAfterEvent(1);
         return this;
     }
 
@@ -103,7 +99,6 @@ public class FormSecondPage extends BasePage
                 (
                         new File("./attach/filesForTest/"+fileName).getAbsolutePath()
                 );
-        waitAfterEvent(1);
         return this;
     }
 
@@ -114,7 +109,6 @@ public class FormSecondPage extends BasePage
                 (
                         new File("./attach/filesForTest/"+fileName).getAbsolutePath()
                 );
-        waitAfterEvent(1);
         return this;
     }
 
@@ -125,24 +119,25 @@ public class FormSecondPage extends BasePage
                 (
                         new File("./attach/filesForTest/"+fileName).getAbsolutePath()
                 );
-        waitAfterEvent(1);
+        waitAfterEvent(3);
         return this;
     }
 
     @Step("Проверка видно ли уведомлние об успешной отправке формы")
     public boolean isFormSendingSuccessful()
     {
+        waitUntilPresenceOfElement(succesfullFormSending, 1);
         return findElementOnPage(succesfullFormSending).isDisplayed();
     }
 
     @Step("Нажатие на кнопку отправить")
-    public FormSecondPage clickSendButton()
+    public FormSecondPage clickSendButton() throws InterruptedException
     {
         findElementOnPage(sendButton).click();
         return this;
     }
 
-    @Step("Видно ли уведолмление о том, чтобы загрузить файл")
+    @Step("Видно ли уведомление с просьбой загрузить файл")
     public boolean isNotificationToUploadFileVisible()
     {
         return findElementOnPage(notificationUploadFile).isDisplayed();
