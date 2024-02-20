@@ -62,7 +62,7 @@ public class MainPageTest
         driver = webDrivermanagment.setDriver(browsers);
         driver.get(MAIN_PAGE);
 
-        authrorizatiobPage = new MainPage(driver);
+        authrorizatiobPage = new AuthrorizatiobPage(driver);
         emailRequestModel = setEmailToAuthRequest2Var();
         email = emailRequestModel.getEmail();
     }
