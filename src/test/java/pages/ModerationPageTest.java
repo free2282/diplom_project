@@ -1,6 +1,7 @@
 package pages;
 
 import io.qameta.allure.junit4.DisplayName;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -148,5 +149,11 @@ public class ModerationPageTest
 
         boolean result = moderationPage.isTimeOfCreatingFormCorrect(currentDay, currentTime, email);
         assertTrue("Время создания анкеты не совпало с реальным временем",result);
+    }
+
+    @After
+    public void tearDown()
+    {
+        preparedActions.getDriver().quit();
     }
 }

@@ -221,7 +221,7 @@ public class SecondPageFormUploadParametrizedTest
     @After
     public void tearDown()
     {
-//        driver.quit();
+        driver.quit();
         //дописапть, если true, то перейти на форму админа и закрыть
     }
 }

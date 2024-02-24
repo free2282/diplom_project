@@ -588,7 +588,7 @@ public class SecondPageFormTest
     @After
     public void tearDown()
     {
-//        quickEvent.getDriver().quit();
+        preparedActions.getDriver().quit();
     }
 
 

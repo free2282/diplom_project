@@ -476,4 +476,9 @@ public class FormOnModerationSideTest
         result = formOnModerationSide.isPeriodOfWorkingEndingOnPageMatchedWithYearOfEnding(periodOfWorking);
         assertTrue("Вводимые данные в поле 'Период работы' не совпали с данными из бд",result);
     }
+
+    public void tearDown()
+    {
+        preparedActions.getDriver().quit();
+    }
 }
