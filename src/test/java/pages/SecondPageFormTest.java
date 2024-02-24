@@ -7,8 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import ru.miigaik.action.QuickEvent;
+import ru.miigaik.action.PreparedActions;
 import ru.miigaik.browser.Browsers;
 import ru.miigaik.pages.FormFirstPage;
 import ru.miigaik.pages.FormSecondPage;
@@ -19,7 +18,7 @@ import static ru.miigaik.browser.Browsers.CHROME;
 @RunWith(Parameterized.class)
 public class SecondPageFormTest
 {
-    private QuickEvent quickEvent;
+    private PreparedActions preparedActions;
     private FormSecondPage formSecondPage;
     private Browsers browsers;
     private FormFirstPage formFirstPage;
@@ -45,8 +44,8 @@ public class SecondPageFormTest
     @Before
     public void setUp() throws InterruptedException
     {
-        quickEvent = new QuickEvent(browsers);
-        quickEvent.logIn();
+        preparedActions = new PreparedActions(browsers);
+        preparedActions.logIn();
     }
 
     @Test
@@ -55,11 +54,11 @@ public class SecondPageFormTest
     {
         boolean actual;
 
-            quickEvent.fillTheFirstForm();
-            formFirstPage = new FormFirstPage(quickEvent.getDriver());
+            preparedActions.fillTheFirstForm();
+            formFirstPage = new FormFirstPage(preparedActions.getDriver());
             formFirstPage.clickNextButton();
 
-            formSecondPage = new FormSecondPage(quickEvent.getDriver());
+            formSecondPage = new FormSecondPage(preparedActions.getDriver());
             actual = formSecondPage.clickMapRef().isMiigaikOnMapVisible();
 
 
@@ -72,14 +71,14 @@ public class SecondPageFormTest
     public void checkSendingFormWithForeignPasportWithoutSnilsAndChangingFIOScanTest() throws InterruptedException
     {
         boolean actual;
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage
                 .setCitizenship("КАЗАХСТАН")
                 .clickNextButton();
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadIncomingStatement("test.pdf")
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
@@ -99,14 +98,14 @@ public class SecondPageFormTest
     {
         boolean actual;
 
-            quickEvent.fillTheFirstForm();
-            formFirstPage = new FormFirstPage(quickEvent.getDriver());
+            preparedActions.fillTheFirstForm();
+            formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
             formFirstPage
                     .clickNextButton();
 
 
-            formSecondPage = new FormSecondPage(quickEvent.getDriver());
+            formSecondPage = new FormSecondPage(preparedActions.getDriver());
             actual = formSecondPage
                     .uploadIncomingStatement("test.pdf")
                     .uploadConsentToTheProcessingOfPersonalData("test.pdf")
@@ -129,12 +128,12 @@ public class SecondPageFormTest
     public void checkSendingFormWithRuPasportTest() throws InterruptedException
     {
         boolean actual;
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage.clickNextButton();
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadIncomingStatement("test.pdf")
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
@@ -160,14 +159,14 @@ public class SecondPageFormTest
         boolean actual;
         try
         {
-            quickEvent.fillTheFirstForm();
-            formFirstPage = new FormFirstPage(quickEvent.getDriver());
+            preparedActions.fillTheFirstForm();
+            formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
             formFirstPage
                     .clickNextButton();
 
 
-            formSecondPage = new FormSecondPage(quickEvent.getDriver());
+            formSecondPage = new FormSecondPage(preparedActions.getDriver());
             actual = formSecondPage
                     .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                     .uploadPersonalList("test.pdf")
@@ -193,12 +192,12 @@ public class SecondPageFormTest
     public void checkErrorSendingWithoutIncomingStatementRuPasportTest() throws InterruptedException
     {
         boolean actual;
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage.clickNextButton();
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                 .uploadPersonalList("test.pdf")
@@ -221,14 +220,14 @@ public class SecondPageFormTest
         boolean actual;
         try
         {
-            quickEvent.fillTheFirstForm();
-            formFirstPage = new FormFirstPage(quickEvent.getDriver());
+            preparedActions.fillTheFirstForm();
+            formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
             formFirstPage
                     .clickNextButton();
 
 
-            formSecondPage = new FormSecondPage(quickEvent.getDriver());
+            formSecondPage = new FormSecondPage(preparedActions.getDriver());
             actual = formSecondPage
                     .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                     .uploadIncomingStatement("test.pdf")
@@ -254,12 +253,12 @@ public class SecondPageFormTest
     public void checkErrorSendingWithoutPersonalDataRuPasportTest() throws InterruptedException
     {
         boolean actual;
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage.clickNextButton();
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                 .uploadIncomingStatement("test.pdf")
@@ -280,11 +279,11 @@ public class SecondPageFormTest
     public void checkErrorSendingWithoutConsentToTheProcessingOfPersonalDataRuPasportTest() throws InterruptedException
     {
         boolean actual;
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
         formFirstPage.clickNextButton();
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadIncomingStatement("test.pdf")
                 .uploadPersonalList("test.pdf")
@@ -308,14 +307,14 @@ public class SecondPageFormTest
         boolean actual;
         try
         {
-            quickEvent.fillTheFirstForm();
-            formFirstPage = new FormFirstPage(quickEvent.getDriver());
+            preparedActions.fillTheFirstForm();
+            formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
             formFirstPage
                     .clickNextButton();
 
 
-            formSecondPage = new FormSecondPage(quickEvent.getDriver());
+            formSecondPage = new FormSecondPage(preparedActions.getDriver());
             actual = formSecondPage
                     .uploadPersonalList("test.pdf")
                     .uploadIncomingStatement("test.pdf")
@@ -343,13 +342,13 @@ public class SecondPageFormTest
         boolean actual;
         try
         {
-            quickEvent.fillTheFirstForm();
-            formFirstPage = new FormFirstPage(quickEvent.getDriver());
+            preparedActions.fillTheFirstForm();
+            formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
             formFirstPage.clickNextButton();
 
 
-            formSecondPage = new FormSecondPage(quickEvent.getDriver());
+            formSecondPage = new FormSecondPage(preparedActions.getDriver());
             actual = formSecondPage
                     .uploadPersonalList("test.pdf")
                     .uploadConsentToTheProcessingOfPersonalData("test.pdf")
@@ -376,12 +375,12 @@ public class SecondPageFormTest
     {
         boolean actual;
 
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage.clickNextButton();
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadPersonalList("test.pdf")
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
@@ -404,14 +403,14 @@ public class SecondPageFormTest
         boolean actual;
         try
         {
-            quickEvent.fillTheFirstForm();
-            formFirstPage = new FormFirstPage(quickEvent.getDriver());
+            preparedActions.fillTheFirstForm();
+            formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
             formFirstPage
                     .clickNextButton();
 
 
-            formSecondPage = new FormSecondPage(quickEvent.getDriver());
+            formSecondPage = new FormSecondPage(preparedActions.getDriver());
             actual = formSecondPage
                     .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                     .uploadPersonalList("test.pdf")
@@ -438,14 +437,14 @@ public class SecondPageFormTest
     {
         boolean actual;
 
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage
                 .clickNextButton();
 
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                 .uploadPersonalList("test.pdf")
@@ -465,13 +464,13 @@ public class SecondPageFormTest
     public void checkAbsentModerationFormWithoutPasportTest() throws InterruptedException
     {
         boolean actual;
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage.clickNextButton();
 
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         try
         {
             actual = formSecondPage
@@ -500,13 +499,13 @@ public class SecondPageFormTest
     public void checkErrorSendingWithoutPasportTest() throws InterruptedException
     {
         boolean actual;
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage.clickNextButton();
 
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                 .uploadPersonalList("test.pdf")
@@ -528,14 +527,14 @@ public class SecondPageFormTest
     {
         boolean actual;
 
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage
                 .clickNextButton();
 
 
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         actual = formSecondPage
                     .uploadConsentToTheProcessingOfPersonalData("test.pdf")
                     .uploadPersonalList("test.pdf")
@@ -559,11 +558,11 @@ public class SecondPageFormTest
     {
         boolean actual;
 
-        quickEvent.fillTheFirstForm();
-        formFirstPage = new FormFirstPage(quickEvent.getDriver());
+        preparedActions.fillTheFirstForm();
+        formFirstPage = new FormFirstPage(preparedActions.getDriver());
 
         formFirstPage.clickNextButton();
-        formSecondPage = new FormSecondPage(quickEvent.getDriver());
+        formSecondPage = new FormSecondPage(preparedActions.getDriver());
         try
         {
             actual = formSecondPage

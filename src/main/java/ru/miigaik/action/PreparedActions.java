@@ -7,11 +7,9 @@ import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
 import ru.miigaik.browser.Browsers;
 import ru.miigaik.browser.WebDrivermanagment;
-import ru.miigaik.pages.ConsumerModel;
-import ru.miigaik.pages.FormFirstPage;
-import ru.miigaik.pages.FormSecondPage;
-import ru.miigaik.pages.AuthrorizatiobPage;
+import ru.miigaik.pages.*;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import static ru.miigaik.action.Generator.setConsumersData;
@@ -19,7 +17,7 @@ import static ru.miigaik.action.Generator.setEmailToAuthRequest2Var;
 import static ru.miigaik.cfg.ConfigurationProject.MAIN_PAGE;
 
 
-public class QuickEvent
+public class PreparedActions
 {
     private WebDriver driver;
     private AuthApi authApi;
@@ -30,10 +28,9 @@ public class QuickEvent
     private String token;
     private AuthrorizatiobPage authrorizatiobPage;
     private FormFirstPage formFirstPage;
-
     private FormSecondPage formSecondPage;
 
-    public QuickEvent(Browsers browsers)
+    public PreparedActions(Browsers browsers)
     {
         authApi = new AuthApi();
         webDrivermanagment = new WebDrivermanagment();
@@ -42,7 +39,7 @@ public class QuickEvent
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
-    public QuickEvent logIn() throws InterruptedException
+    public PreparedActions logIn() throws InterruptedException
     {
         authrorizatiobPage = new AuthrorizatiobPage(driver);
         driver.get(MAIN_PAGE);
@@ -63,7 +60,31 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillTheFirstForm() throws InterruptedException
+    public PreparedActions logInOnModerationPage() throws InterruptedException
+    {
+        String adminEmail = "admin@ad.min";
+
+        authrorizatiobPage = new AuthrorizatiobPage(driver);
+        driver.get(MAIN_PAGE);
+        emailRequestModel = setEmailToAuthRequest2Var();
+        emailRequestModel.setEmail(adminEmail);
+
+
+        authrorizatiobPage.setEmailToField(adminEmail)
+                .waitAfterEvent(5)
+                .clickGetTokenButton()
+                .waitAfterEvent(5);
+
+        Response response = authApi.authEmail(emailRequestModel);
+        emailResponseModel = response.body().as(EmailResponseModel.class);
+        token = emailResponseModel.getDetail();
+
+        authrorizatiobPage.waitAfterEvent(5).setTokenToField(token).waitAfterEvent(5)
+                .clickLogInButton().waitAfterEvent(5);
+        return this;
+    }
+
+    public PreparedActions fillTheFirstForm() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -103,10 +124,11 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillTheFirstFormRuWithoutSeriesDul() throws InterruptedException
+    public PreparedActions fillTheFirstFormRuWithoutSeriesDul() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
+        int educationProgram = new Random().nextInt(8);
         formFirstPage
                 .uploadPhoto("main_icons.png")
                 .quickSetName(consumerModel.getName())
@@ -119,7 +141,7 @@ public class QuickEvent
                 .setSnils("178-747-544 36")
                 .setSnilsRegistrationDate("01.01.2013")
                 .setDisabilityYes()
-                .setEducationProgram(1)
+                .setEducationProgram(educationProgram)
                 .setRussianPasport()
                 .setDulNumber("466378")
                 .setGovernmentAgency("Умвд №3")
@@ -142,10 +164,11 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillTheFirstFormRuWithoutNumberSnilsAndDate() throws InterruptedException
+    public PreparedActions fillTheFirstFormRuWithoutNumberSnilsAndDate() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
+        int educationProgram = new Random().nextInt(8);
         formFirstPage
                 .uploadPhoto("main_icons.png")
                 .quickSetName(consumerModel.getName())
@@ -156,7 +179,7 @@ public class QuickEvent
                 .setPhoneNumber(consumerModel.getPhoneNumbers())
                 .setHighGradeLevel()
                 .setDisabilityYes()
-                .setEducationProgram(1)
+                .setEducationProgram(educationProgram)
                 .setRussianPasport()
                 .setDulSeries("4717")
                 .setDulNumber("466378")
@@ -180,10 +203,11 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillTheFirstFormRuWithoutCodeAgency() throws InterruptedException
+    public PreparedActions fillTheFirstFormRuWithoutCodeAgency() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
+        int educationProgram = new Random().nextInt(8);
         formFirstPage
                 .uploadPhoto("main_icons.png")
                 .quickSetName(consumerModel.getName())
@@ -196,7 +220,7 @@ public class QuickEvent
                 .setPhoneNumber(consumerModel.getPhoneNumbers())
                 .setHighGradeLevel()
                 .setDisabilityYes()
-                .setEducationProgram(1)
+                .setEducationProgram(educationProgram)
                 .setRussianPasport()
                 .setDulSeries("4717")
                 .setDulNumber("466378")
@@ -219,10 +243,11 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillTheFirstFormWithoutAutoPhone() throws InterruptedException
+    public PreparedActions fillTheFirstFormWithoutAutoPhone() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
+        int educationProgram = new Random().nextInt(8);
         formFirstPage
                 .uploadPhoto("main_icons.png")
                 .quickSetName(consumerModel.getName())
@@ -234,7 +259,7 @@ public class QuickEvent
                 .setSnils("178-747-544 36")
                 .setSnilsRegistrationDate("01.01.2013")
                 .setDisabilityYes()
-                .setEducationProgram(1)
+                .setEducationProgram(educationProgram)
                 .setRussianPasport()
                 .setDulSeries("46 16")
                 .setDulNumber("466378")
@@ -258,10 +283,11 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillTheFirstFormWithoutAutoBirthDate() throws InterruptedException
+    public PreparedActions fillTheFirstFormWithoutAutoBirthDate() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
+        int educationProgram = new Random().nextInt(8);
         formFirstPage
                 .uploadPhoto("main_icons.png")
                 .quickSetName(consumerModel.getName())
@@ -273,7 +299,7 @@ public class QuickEvent
                 .setSnils("178-747-544 36")
                 .setSnilsRegistrationDate("01.01.2013")
                 .setDisabilityYes()
-                .setEducationProgram(1)
+                .setEducationProgram(educationProgram)
                 .setRussianPasport()
                 .setDulSeries("46 16")
                 .setDulNumber("466378")
@@ -297,7 +323,7 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillMinFormForeignPasport() throws InterruptedException
+    public PreparedActions fillMinFormForeignPasport() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         ConsumerModel consumerModel = setConsumersData();
@@ -331,7 +357,7 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillSecondForm() throws InterruptedException
+    public PreparedActions fillSecondForm() throws InterruptedException
     {
         formSecondPage = new FormSecondPage(driver);
         formSecondPage
@@ -347,11 +373,10 @@ public class QuickEvent
         return this;
     }
 
-    public QuickEvent fillFullForm() throws InterruptedException
+    public PreparedActions fillFullForm() throws InterruptedException
     {
         formFirstPage = new FormFirstPage(driver);
         formSecondPage = new FormSecondPage(driver);
-
 
         ConsumerModel consumerModel = setConsumersData();
         formFirstPage
@@ -366,7 +391,7 @@ public class QuickEvent
                 .setSnils("178-747-544 36")
                 .setSnilsRegistrationDate("01.01.2013")
                 .setDisabilityYes()
-                .setEducationProgram(1)
+                .setEducationProgram(0)
                 .setRussianPasport()
                 .setDulSeries("46 16")
                 .setDulNumber("466378")
@@ -388,6 +413,7 @@ public class QuickEvent
                 .setWorkingPosition("Геодезист")
                 .setPeriodOfWork("с 2024")
                 .clickNextButton();
+
         formSecondPage
                 .uploadIncomingStatement("test.pdf")
                 .uploadConsentToTheProcessingOfPersonalData("test.pdf")
@@ -399,6 +425,17 @@ public class QuickEvent
                 .clickSendButton();
         return this;
     }
+
+    public PreparedActions logInOnModerationAndOpenFormByEmail() throws InterruptedException
+    {
+        logIn();
+        fillFullForm();
+        new FormSecondPage(driver).clickExitButton();
+        logInOnModerationPage();
+        new ModerationPage(driver).clickFormByEmail(getEmail());
+        return this;
+    }
+
     public FormFirstPage getFormFirstPage()
     {
         return formFirstPage;
@@ -406,5 +443,14 @@ public class QuickEvent
     public WebDriver getDriver()
     {
         return driver;
+    }
+    public FormSecondPage getFormSecondPage()
+    {
+        return formSecondPage;
+    }
+
+    public String getEmail()
+    {
+        return email;
     }
 }

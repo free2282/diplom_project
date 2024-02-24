@@ -1,6 +1,5 @@
 package ru.miigaik.pages;
 
-import io.qameta.allure.Allure;
 import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -8,7 +7,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class FormSecondPage extends BasePage
 {
@@ -28,6 +28,9 @@ public class FormSecondPage extends BasePage
     private final By succesfullFormSending = By.xpath(".//div[text()='Форма успешно отправлена на проверку']");
     private final By notificationUploadFile = By.xpath(".//span[text()='Загрузите файл']");
     private final By formOnModeration = By.xpath(".//p[text()='Форма находится на модерации']");
+    private final By exitButton = By.xpath(".//button[text()='Выйти']");
+    private String currentTimeOfCreatingForm;
+    private String currentDate;
 
     public FormSecondPage(WebDriver driver)
     {
@@ -43,6 +46,13 @@ public class FormSecondPage extends BasePage
         switchToWindow();
 
         wait.until(ExpectedConditions.urlToBe("https://yandex.ru/maps/org/miigaik/1082312243/?ll=37.662039%2C55.763493&z=16"));
+        return this;
+    }
+
+    @Step("Нажатие на кнопку выйти на второй странице анкеты")
+    public FormSecondPage clickExitButton()
+    {
+        findElementOnPage(exitButton);
         return this;
     }
 
@@ -133,7 +143,18 @@ public class FormSecondPage extends BasePage
     @Step("Нажатие на кнопку отправить")
     public FormSecondPage clickSendButton() throws InterruptedException
     {
-        findElementOnPage(sendButton).click();
+        Date currentDate = new Date();
+        SimpleDateFormat onlyTime = new SimpleDateFormat("HH:mm");
+        String formattedTime = onlyTime.format(currentDate);
+
+        SimpleDateFormat onlyDay = new SimpleDateFormat("dd");
+        String formattedDay = onlyDay.format(currentDate);
+
+        setCurrentDate(formattedDay + " ");
+        setCurrentTimeOfCreatingForm(formattedTime);
+
+        System.out.println(getCurrentTimeOfCreatingForm());
+        clickElementOnPage(sendButton);
         return this;
     }
 
@@ -147,5 +168,25 @@ public class FormSecondPage extends BasePage
     public boolean isFormOnModeration()
     {
         return findElementOnPage(formOnModeration).isDisplayed();
+    }
+
+    public String getCurrentTimeOfCreatingForm()
+    {
+        return currentTimeOfCreatingForm;
+    }
+
+    public void setCurrentTimeOfCreatingForm(String currentTimeOfCreatingForm)
+    {
+        this.currentTimeOfCreatingForm = currentTimeOfCreatingForm;
+    }
+
+    public String getCurrentDate()
+    {
+        return currentDate;
+    }
+
+    public void setCurrentDate(String currentDate)
+    {
+        this.currentDate = currentDate;
     }
 }

@@ -1,6 +1,183 @@
 package ru.miigaik.pages;
 
-public class ModerationPage
-{
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import ru.miigaik.action.PreparedActions;
 
+public class ModerationPage extends BasePage
+{
+    private PreparedActions preparedActions;
+    private By sortByTime = By.xpath("//*[@id='root']/main/div/div[2]/div/ul[1]/li[4]/svg");
+    private By searchBar = By.xpath(".//input[@placeholder='Поиск']");
+    private By labelFormNotChecked = By.xpath(".//label[text()='Не проверено']");
+    private By labelFormAccepted = By.xpath(".//label[text()='Принято']");
+    private By labelFormDeclined = By.xpath(".//label[text()='Отклонено']");
+    private By currentRowRorm = By.xpath("//*[@id=\"root\"]/main/div/div[2]/div/ul[2]");
+
+    private By filterByStatusButton = By.xpath("//*[@id=\"root\"]/main/div/div[2]/div/ul[1]/li[6]/div");
+    private By filterByEducationProgram = By.xpath("//*[@id=\"root\"]/main/div/div[2]/div/ul[1]/li[3]/div");
+    private By filterButtonAccepted = By.xpath("//*[@id=\"root\"]/main/div/div[2]/div/ul[1]/li[6]/div/ul/div[1]/p[text()='Принято']");
+    private By filterButtonDeclined = By.xpath("//*[@id=\"root\"]/main/div/div[2]/div/ul[1]/li[6]/div/ul/div[2]/p[text()='Отклонено']");
+    private By filterButtonNotChecked = By.xpath("//*[@id=\"root\"]/main/div/div[2]/div/ul[1]/li[6]/div/ul/div[3]/p[text()='Не проверено']");
+    private By educationProgramHardCode = By.xpath("//*[@id=\"root\"]/main/div/div[2]/div/ul[1]/li[3]/div/ul/div[p[text()='Геодезические и аэрокосмические технологии в инфраструктуре пространственных данных (программа профессиональной переподготовки)']]");
+    // private By educationProgramWontSeeInFilter = By.xpath(".//p[text()='Геосервисы как средство цифровой трансформации экономики (программа повышения квалификации)']");
+    private By formWithBanFilteredEducationProgramWontSee = By.xpath(".//ul/li/p[text()='Геосервисы как средство цифровой трансформации экономики (программа повышения квалификации)']");
+    private By formWithFilteredEducationProgramWillSee = By.xpath(".//ul/li/p[text()='Геодезические и аэрокосмические технологии в инфраструктуре пространственных данных (программа профессиональной переподготовки)']");
+
+    public ModerationPage(WebDriver driver)
+    {
+        super(driver);
+    }
+
+    public ModerationPage clickSortByTime()
+    {
+        clickElementOnPage(sortByTime);
+        return this;
+    }
+
+    public boolean isFormEmailVisible(String email)
+    {
+        return findElementOnPage(By.xpath(".//label[text()='" + email + "']")).isDisplayed();
+    }
+
+    public ModerationPage setDataToSearch(String data)
+    {
+        setDataToInputElement(searchBar, data);
+        return this;
+    }
+
+        ///ul[li/p/div/label[text()='jzmt43@gmail.com']]
+
+    public boolean isValueStatusCurrentForm(String email, String status)
+    {
+        // //ul[li/p/div/label[text()='jzmt43@gmail.com']]/li/p/div/label[text()='Не проверено']
+        return findElementOnPage(By.xpath(
+                "//ul[li/p/div/label[text()='"+email+"']]/li/p/div/label[text()='"+status+"']"
+        )).isDisplayed();
+    }
+
+    public ModerationPage clickFilterAccept()
+    {
+        WebElement filterWebElement = findElementOnPage(filterByStatusButton);
+        new Actions(driver).moveToElement(filterWebElement).perform();
+
+        clickElementOnPage(filterButtonAccepted);
+        return this;
+    }
+
+    public ModerationPage clickFilterDeclined()
+    {
+        WebElement filterWebElement = findElementOnPage(filterByStatusButton);
+        new Actions(driver).moveToElement(filterWebElement).perform();
+
+        clickElementOnPage(filterButtonDeclined);
+        return this;
+    }
+
+    public ModerationPage clickFilterNotChecked()
+    {
+        WebElement filterWebElement = findElementOnPage(filterByStatusButton);
+        new Actions(driver).moveToElement(filterWebElement).perform();
+
+        clickElementOnPage(filterButtonNotChecked);
+        return this;
+    }
+
+    public ModerationPage clickHardCodeEducationProgramFilter()
+    {
+        WebElement filterWebElement = findElementOnPage(filterByEducationProgram);
+        new Actions(driver).moveToElement(filterWebElement).perform();
+
+        clickElementOnPage(educationProgramHardCode);
+        return this;
+    }
+
+    public boolean isVisibleOnlyHardCodeEducationProgramForms()
+    {
+        boolean result;
+        try
+        {
+            result = (findElementOnPage(formWithBanFilteredEducationProgramWontSee).isDisplayed());
+
+        }
+        catch (Exception e)
+        {
+            result = findElementOnPage(formWithFilteredEducationProgramWillSee).isDisplayed();
+        }
+
+        return result;
+    }
+
+    public boolean isVisibleOnlyAcceptedForms()
+    {
+        boolean result;
+        try
+        {
+            result = (findElementOnPage(labelFormNotChecked).isDisplayed())
+                    |
+                    (findElementOnPage(labelFormDeclined).isDisplayed());
+            result = false;
+        }
+        catch (Exception e)
+        {
+            result = findElementOnPage(labelFormAccepted).isDisplayed();
+        }
+
+        return result;
+    }
+
+    public boolean isVisibleOnlyDeclinedForms()
+    {
+        boolean result;
+        try
+        {
+            result = (findElementOnPage(labelFormNotChecked).isDisplayed())
+                    |
+                    (findElementOnPage(labelFormAccepted).isDisplayed());
+            result = false;
+        }
+        catch (Exception e)
+        {
+            result = findElementOnPage(labelFormDeclined).isDisplayed();
+        }
+
+        return result;
+    }
+
+    public boolean isVisibleOnlyNotCheckedForms()
+    {
+        boolean result;
+        try
+        {
+            result = (findElementOnPage(labelFormDeclined).isDisplayed())
+                    |
+                    (findElementOnPage(labelFormAccepted).isDisplayed());
+            result = false;
+        }
+        catch (Exception e)
+        {
+            result = findElementOnPage(labelFormNotChecked).isDisplayed();
+        }
+
+        return result;
+    }
+
+    public ModerationPage clickFormByEmail(String email)
+    {
+        clickElementOnPage(
+                By.xpath(".//ul[li/p/div/label[text()='" + email+ "']]")
+        );
+        return this;
+    }
+
+    public boolean isTimeOfCreatingFormCorrect(String currtntDayPlusSpace, String time, String email)
+    {
+        return findElementOnPage(By.xpath(
+                ".//ul[li/p/div/label[text()='"+email+"']]/li/p[contains(text(),'"+currtntDayPlusSpace+"') and contains(text(),'"+time+"')]"
+
+        )).isDisplayed();
+    }
 }
+

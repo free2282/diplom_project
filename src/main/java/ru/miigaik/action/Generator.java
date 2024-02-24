@@ -47,7 +47,7 @@ public class Generator
 
 
         String name = faker.name().firstName();
-        String phoneNumber = fakeValuesService.bothify("(929)###-##-##");
+        String phoneNumber = fakeValuesService.bothify("(929) ###-##-##");
         String zipCode = faker.address().zipCode();
         String state = faker.address().state();
         String city = faker.address().city();

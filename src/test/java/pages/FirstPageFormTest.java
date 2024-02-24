@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
-import ru.miigaik.action.QuickEvent;
+import ru.miigaik.action.PreparedActions;
 import ru.miigaik.browser.Browsers;
 import ru.miigaik.pages.FormFirstPage;
 
@@ -22,7 +22,7 @@ import static ru.miigaik.browser.Browsers.*;
 @RunWith(Parameterized.class)
 public class FirstPageFormTest
 {
-    private QuickEvent quickEvent;
+    private PreparedActions preparedActions;
     private Browsers browsers;
     private WebDriver driver;
 
@@ -46,9 +46,9 @@ public class FirstPageFormTest
     @Before
     public void setUp() throws InterruptedException
     {
-        quickEvent = new QuickEvent(browsers);
-        quickEvent.logIn();
-        driver = quickEvent.getDriver();
+        preparedActions = new PreparedActions(browsers);
+        preparedActions.logIn();
+        driver = preparedActions.getDriver();
     }
 
     @Test
@@ -56,8 +56,8 @@ public class FirstPageFormTest
     public void fillFullFieldRuPasportAndCitizenshipFirstFormTest() throws InterruptedException {
         boolean result;
 
-            quickEvent.fillTheFirstForm();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstForm();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             result = firstPage.setCitizenship("КАЗАХСТАН").clickNextButton()
                     .isTextSecondPageVisible();
 
@@ -70,8 +70,8 @@ public class FirstPageFormTest
     public void fillFullFieldOtherCountryPasportAndCitizenshipFirstFormTest() throws InterruptedException {
         boolean result;
 
-            quickEvent.fillTheFirstForm();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstForm();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             result = firstPage.clickNextButton().isTextSecondPageVisible();
 
 
@@ -85,8 +85,8 @@ public class FirstPageFormTest
     public void fillOnlyRequiredFieldForeignerFirstFormTest() throws InterruptedException {
         boolean result;
 
-            quickEvent.fillMinFormForeignPasport();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillMinFormForeignPasport();
+            FormFirstPage form = preparedActions.getFormFirstPage();
 
             result = form
                     .clickNextButton()
@@ -102,8 +102,8 @@ public class FirstPageFormTest
         boolean result;
         String otherCountry = "КАЗАХСТАН";
 
-            quickEvent.fillTheFirstForm();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstForm();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
                     .setCitizenship(otherCountry)
                     .setOtherCountryPasport()
@@ -131,9 +131,9 @@ public class FirstPageFormTest
         String formattedDateLess14 = errorDateLess14.format(formatter);
 
 
-        quickEvent.fillTheFirstFormWithoutAutoBirthDate();
+        preparedActions.fillTheFirstFormWithoutAutoBirthDate();
 
-        FormFirstPage form = quickEvent.getFormFirstPage();
+        FormFirstPage form = preparedActions.getFormFirstPage();
         result = form.setBirth(formattedDateLess14)
                 .clickNextButton()
                 .isErrorVisibleSpanElement(expected);
@@ -157,9 +157,9 @@ public class FirstPageFormTest
         String formattedDateLess14 = errorDateLess14.format(formatter);
 
 
-        quickEvent.fillTheFirstFormWithoutAutoBirthDate();
+        preparedActions.fillTheFirstFormWithoutAutoBirthDate();
 
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form.setBirth(formattedDateLess14)
                     .clickNextButton()
                     .getErrorTextSpanElement(expected);
@@ -174,8 +174,8 @@ public class FirstPageFormTest
         boolean result;
         String dulSeries = "289711";
 
-            quickEvent.fillTheFirstFormRuWithoutSeriesDul();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutSeriesDul();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form.setDulSeries(dulSeries)
                     .checkDulSeriesValidation(dulSeries);
 
@@ -189,8 +189,8 @@ public class FirstPageFormTest
         boolean result;
         String expected = "Поле обязательно к заполнению";
 
-            quickEvent.fillTheFirstFormRuWithoutSeriesDul();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutSeriesDul();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form.clickNextButton()
                     .isErrorVisibleSpanElement(expected);
 
@@ -203,8 +203,8 @@ public class FirstPageFormTest
         String result;
         String expected = "Поле обязательно к заполнению";
 
-            quickEvent.fillTheFirstFormRuWithoutSeriesDul();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutSeriesDul();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
                     .clickNextButton()
                     .getErrorTextSpanElement(expected);
@@ -219,8 +219,8 @@ public class FirstPageFormTest
         String expected = "Поле обязательно к заполнению";
         String snilsRegistrationDate = "10.10.2015";
 
-            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutNumberSnilsAndDate();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
                     .setSnilsRegistrationDate(snilsRegistrationDate)
                     .clickNextButton()
@@ -236,8 +236,8 @@ public class FirstPageFormTest
         String expected = "Поле обязательно к заполнению";
         String snilsRegistration = "10.10.2015";
 
-            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutNumberSnilsAndDate();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
                     .setSnilsRegistrationDate(snilsRegistration)
                     .clickNextButton()
@@ -303,8 +303,8 @@ public class FirstPageFormTest
         String correctDate = "01.01.2015";
         String expected = "Неверное контрольное число.";
 
-            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutNumberSnilsAndDate();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
 
                     .setSnils(errorSnilsNumber)
@@ -323,8 +323,8 @@ public class FirstPageFormTest
         String correctDate = "01.01.2015";
         String expected = "Неверное контрольное число.";
 
-            quickEvent.fillTheFirstFormRuWithoutNumberSnilsAndDate();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutNumberSnilsAndDate();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
 
                     .setSnils(errorSnilsNumber)
@@ -340,8 +340,8 @@ public class FirstPageFormTest
         boolean result;
         String expected = "Поле обязательно к заполнению";
 
-            quickEvent.fillTheFirstFormRuWithoutCodeAgency();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutCodeAgency();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
                     .clickNextButton()
                     .isErrorVisibleSpanElement(expected);
@@ -355,8 +355,8 @@ public class FirstPageFormTest
         String result;
         String expected = "Поле обязательно к заполнению";
 
-            quickEvent.fillTheFirstFormRuWithoutCodeAgency();
-            FormFirstPage form = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormRuWithoutCodeAgency();
+            FormFirstPage form = preparedActions.getFormFirstPage();
             result = form
                     .clickNextButton()
                     .getErrorTextSpanElement(expected);
@@ -403,8 +403,8 @@ public class FirstPageFormTest
         String expected = "Тип файла может быть одним из следующих: image/jpeg image/jpg image/png";
         String fileErrorTypeNameInAttachFolder = "notPick.mp3";
 
-            quickEvent.fillTheFirstForm();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstForm();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             firstPage.uploadPhoto(fileErrorTypeNameInAttachFolder);
 
             result = firstPage.isErrorVisibleSpanElement(expected);
@@ -421,8 +421,8 @@ public class FirstPageFormTest
         String result = "";
         String fileErrorTypeNameInAttachFolder = "notPick.mp3";
 
-            quickEvent.fillTheFirstForm();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstForm();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             firstPage.uploadPhoto(fileErrorTypeNameInAttachFolder);
 
             result = firstPage.getErrorTextSpanElement(expected);
@@ -439,8 +439,8 @@ public class FirstPageFormTest
         String expected = "Неверный формат номера телефона";
         String errorPhoneNumber = "(111)111-11-1";
 
-            quickEvent.fillTheFirstFormWithoutAutoPhone();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormWithoutAutoPhone();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
             //уточнить у Бехи
             result = firstPage.isErrorVisibleSpanElement(expected);
@@ -456,8 +456,8 @@ public class FirstPageFormTest
         String expected = "Неверный формат номера телефона";
         String errorPhoneNumber = "(111)111-11-1";
 
-            quickEvent.fillTheFirstFormWithoutAutoPhone();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormWithoutAutoPhone();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
             //уточнить у Бехи
             result = firstPage.getErrorTextSpanElement(expected);
@@ -472,8 +472,8 @@ public class FirstPageFormTest
         String expected = "Введен некорректный номер телефона.";
         String errorPhoneNumber = "(111)111-11-11";
 
-            quickEvent.fillTheFirstFormWithoutAutoPhone();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormWithoutAutoPhone();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
             //уточнить у Бехи
             result = firstPage.isErrorVisibleSpanElement(expected);
@@ -488,8 +488,8 @@ public class FirstPageFormTest
         String expected = "Введен некорректный номер телефона.";
         String errorPhoneNumber = "(111)111-11-11";
 
-            quickEvent.fillTheFirstFormWithoutAutoPhone();
-            FormFirstPage firstPage = quickEvent.getFormFirstPage();
+            preparedActions.fillTheFirstFormWithoutAutoPhone();
+            FormFirstPage firstPage = preparedActions.getFormFirstPage();
             firstPage.setPhoneNumber(errorPhoneNumber).clickNextButton();
 
             //уточнить у Бехи

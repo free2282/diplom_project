@@ -8,13 +8,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
-import ru.miigaik.action.QuickEvent;
+import ru.miigaik.action.PreparedActions;
 import ru.miigaik.browser.Browsers;
-import ru.miigaik.pages.BasePage;
 import ru.miigaik.pages.FormFirstPage;
 import ru.miigaik.pages.FormSecondPage;
-
-import java.io.File;
 
 import static org.junit.Assert.assertEquals;
 import static ru.miigaik.browser.Browsers.*;
@@ -22,7 +19,7 @@ import static ru.miigaik.browser.Browsers.*;
 @RunWith(Parameterized.class)
 public class SecondPageFormUploadParametrizedTest
 {
-    private QuickEvent quickEvent;
+    private PreparedActions preparedActions;
     private FormSecondPage formSecondPage;
     private Browsers browsers;
     private String fileName;
@@ -74,9 +71,9 @@ public class SecondPageFormUploadParametrizedTest
     @Before
     public void setUp() throws InterruptedException
     {
-        quickEvent = new QuickEvent(browsers);
-        quickEvent.logIn().fillTheFirstForm();
-        driver = quickEvent.getDriver();
+        preparedActions = new PreparedActions(browsers);
+        preparedActions.logIn().fillTheFirstForm();
+        driver = preparedActions.getDriver();
         FormFirstPage formFirstPage = new FormFirstPage(driver);
         formFirstPage.clickNextButton();
 

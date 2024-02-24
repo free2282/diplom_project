@@ -46,9 +46,9 @@ public class MainPageTest
         return new Object[][]
                 {
                 {CHROME},
-//                {YANDEX},
-//                {FIREFOX},
-//                {EDGE}
+                {YANDEX},
+                {FIREFOX},
+                {EDGE}
         };
     }
 
