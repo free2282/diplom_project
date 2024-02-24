@@ -1,5 +1,7 @@
 package ru.miigaik.pages;
 
+import io.qameta.allure.Allure;
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -31,33 +33,32 @@ public class ModerationPage extends BasePage
         super(driver);
     }
 
-    public ModerationPage clickSortByTime()
-    {
-        clickElementOnPage(sortByTime);
-        return this;
-    }
 
+    @Step("Проверка видимости по ее почте")
     public boolean isFormEmailVisible(String email)
     {
         return findElementOnPage(By.xpath(".//label[text()='" + email + "']")).isDisplayed();
     }
 
+    @Step("Устанвока занчения в поля поиска")
     public ModerationPage setDataToSearch(String data)
     {
         setDataToInputElement(searchBar, data);
         return this;
     }
 
-        ///ul[li/p/div/label[text()='jzmt43@gmail.com']]
-
+    @Step("Проверка соответствия анкеты и ее статуса")
     public boolean isValueStatusCurrentForm(String email, String status)
     {
-        // //ul[li/p/div/label[text()='jzmt43@gmail.com']]/li/p/div/label[text()='Не проверено']
+        Allure.addAttachment("Почта анкеты", email);
+        Allure.addAttachment("Статус анкеты", status);
+
         return findElementOnPage(By.xpath(
                 "//ul[li/p/div/label[text()='"+email+"']]/li/p/div/label[text()='"+status+"']"
         )).isDisplayed();
     }
 
+    @Step("Использование фильтра отображения анкет со статусом 'Принято'")
     public ModerationPage clickFilterAccept()
     {
         WebElement filterWebElement = findElementOnPage(filterByStatusButton);
@@ -67,6 +68,7 @@ public class ModerationPage extends BasePage
         return this;
     }
 
+    @Step("Использование фильтра отображения анкет со статусом 'Отклонено'")
     public ModerationPage clickFilterDeclined()
     {
         WebElement filterWebElement = findElementOnPage(filterByStatusButton);
@@ -76,6 +78,7 @@ public class ModerationPage extends BasePage
         return this;
     }
 
+    @Step("Использование фильтра отображения анкет со статусом'Не проверено'")
     public ModerationPage clickFilterNotChecked()
     {
         WebElement filterWebElement = findElementOnPage(filterByStatusButton);
@@ -85,6 +88,7 @@ public class ModerationPage extends BasePage
         return this;
     }
 
+    @Step("Использование фильтра отображения анкет с определенной программой ДПО ")
     public ModerationPage clickHardCodeEducationProgramFilter()
     {
         WebElement filterWebElement = findElementOnPage(filterByEducationProgram);
@@ -94,6 +98,7 @@ public class ModerationPage extends BasePage
         return this;
     }
 
+    @Step("Проверка видимости анкет послее использования фильтра по программам ДПО")
     public boolean isVisibleOnlyHardCodeEducationProgramForms()
     {
         boolean result;
@@ -110,6 +115,7 @@ public class ModerationPage extends BasePage
         return result;
     }
 
+    @Step("Проверка видимости только принятых форм")
     public boolean isVisibleOnlyAcceptedForms()
     {
         boolean result;
@@ -128,6 +134,7 @@ public class ModerationPage extends BasePage
         return result;
     }
 
+    @Step("Проверка видимости только отклоненных форм")
     public boolean isVisibleOnlyDeclinedForms()
     {
         boolean result;
@@ -146,6 +153,7 @@ public class ModerationPage extends BasePage
         return result;
     }
 
+    @Step("Проверка видимости только не проверенных форм")
     public boolean isVisibleOnlyNotCheckedForms()
     {
         boolean result;
@@ -164,6 +172,7 @@ public class ModerationPage extends BasePage
         return result;
     }
 
+    @Step("Выбор анкеты по ее почте")
     public ModerationPage clickFormByEmail(String email)
     {
         clickElementOnPage(
@@ -172,6 +181,7 @@ public class ModerationPage extends BasePage
         return this;
     }
 
+    @Step("Проверка правильного отображения времени создания анкеты")
     public boolean isTimeOfCreatingFormCorrect(String currtntDayPlusSpace, String time, String email)
     {
         return findElementOnPage(By.xpath(

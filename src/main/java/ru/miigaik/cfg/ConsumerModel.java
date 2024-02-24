@@ -1,4 +1,4 @@
-package ru.miigaik.pages;
+package ru.miigaik.cfg;
 
 public class ConsumerModel
 {

@@ -4,7 +4,7 @@ import com.github.javafaker.Faker;
 import com.github.javafaker.service.RandomService;
 import ru.miigaik.api.model.auth.EmailRequestModel;
 import com.github.javafaker.service.FakeValuesService;
-import ru.miigaik.pages.ConsumerModel;
+import ru.miigaik.cfg.ConsumerModel;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

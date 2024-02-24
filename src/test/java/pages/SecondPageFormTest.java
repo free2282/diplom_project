@@ -13,7 +13,7 @@ import ru.miigaik.pages.FormFirstPage;
 import ru.miigaik.pages.FormSecondPage;
 
 import static org.junit.Assert.*;
-import static ru.miigaik.browser.Browsers.CHROME;
+import static ru.miigaik.browser.Browsers.*;
 
 @RunWith(Parameterized.class)
 public class SecondPageFormTest
@@ -34,10 +34,10 @@ public class SecondPageFormTest
     {
         return new Object[][]
                 {
-                        {CHROME}
-//                        {YANDEX},
-//                        {FIREFOX},
-//                        {EDGE}
+                        {CHROME},
+                        {YANDEX},
+                        {FIREFOX},
+                        {EDGE}
                 };
     }
 

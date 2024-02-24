@@ -7,6 +7,7 @@ import ru.miigaik.api.model.auth.EmailRequestModel;
 import ru.miigaik.api.model.auth.EmailResponseModel;
 import ru.miigaik.browser.Browsers;
 import ru.miigaik.browser.WebDrivermanagment;
+import ru.miigaik.cfg.ConsumerModel;
 import ru.miigaik.pages.*;
 
 import java.util.Random;

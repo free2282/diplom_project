@@ -39,32 +39,32 @@ public class SecondPageFormUploadParametrizedTest
         return new Object[][]
                 {
                         {CHROME,"test.jpeg", true},
-//                        {CHROME,"test.jpg", true},
-//                        {CHROME,"test.pdf", true},
-//                        {CHROME,"test.png", true},
-//                        {CHROME,"text.txt", false},
-//                        {CHROME,"more5mb.jpeg", false},
+                        {CHROME,"test.jpg", true},
+                        {CHROME,"test.pdf", true},
+                        {CHROME,"test.png", true},
+                        {CHROME,"text.txt", false},
+                        {CHROME,"more5mb.jpeg", false},
 
-//                        {YANDEX,"test.jpeg", true},
-//                        {YANDEX,"test.jpg", true},
-//                        {YANDEX,"test.pdf", true},
-//                        {YANDEX,"test.png", true},
-//                        {YANDEX,"text.txt", false},
-//                        {YANDEX,"more5mb.jpeg", false},
-//
-//                        {FIREFOX,"test.jpeg", true},
-//                        {FIREFOX,"test.jpg", true},
-//                        {FIREFOX,"test.pdf", true},
-//                        {FIREFOX,"test.png", true},
-//                        {FIREFOX,"text.txt", false},
-//                        {FIREFOX,"more5mb.jpeg", false},
-//
-//                        {EDGE,"test.jpeg", true},
-//                        {EDGE,"test.jpg", true},
-//                        {EDGE,"test.pdf", true},
-//                        {EDGE,"test.png", true},
-//                        {EDGE,"text.txt", false},
-//                        {EDGE,"more5mb.jpeg", false},
+                        {YANDEX,"test.jpeg", true},
+                        {YANDEX,"test.jpg", true},
+                        {YANDEX,"test.pdf", true},
+                        {YANDEX,"test.png", true},
+                        {YANDEX,"text.txt", false},
+                        {YANDEX,"more5mb.jpeg", false},
+
+                        {FIREFOX,"test.jpeg", true},
+                        {FIREFOX,"test.jpg", true},
+                        {FIREFOX,"test.pdf", true},
+                        {FIREFOX,"test.png", true},
+                        {FIREFOX,"text.txt", false},
+                        {FIREFOX,"more5mb.jpeg", false},
+
+                        {EDGE,"test.jpeg", true},
+                        {EDGE,"test.jpg", true},
+                        {EDGE,"test.pdf", true},
+                        {EDGE,"test.png", true},
+                        {EDGE,"text.txt", false},
+                        {EDGE,"more5mb.jpeg", false},
                 };
     }
 

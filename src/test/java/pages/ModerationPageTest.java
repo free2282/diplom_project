@@ -30,9 +30,9 @@ public class ModerationPageTest
     {
         return new Object[][]
                 {
-//                        {CHROME},
-//                {YANDEX},
-//                {FIREFOX},
+                        {CHROME},
+                {YANDEX},
+                {FIREFOX},
                 {EDGE}
                 };
     }
